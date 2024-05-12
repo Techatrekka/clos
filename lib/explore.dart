@@ -13,25 +13,8 @@ class ExploreScreen extends StatefulWidget {
 
 class _ExploreScreenState extends State<ExploreScreen> {
   int _selectedIndex = 1;
-  MaterialColor _library = Colors.green;
-  MaterialColor _explore = Colors.amber;
 
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Library',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Explore',
-      style: optionStyle,
-    ),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void _onNavBarItemTapped(int index) {
     switch (index) {
       case 0:
         Navigator.pushReplacement(
@@ -49,8 +32,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
         title: Text(widget.title),
       ),
       bottomNavigationBar: CustomBottomNavigation(
-        selectedIndex : this._selectedIndex,
-        onTap: _onItemTapped,),
+        selectedIndex : _selectedIndex,
+        onTap: _onNavBarItemTapped,),
     );
   }
 }

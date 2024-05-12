@@ -33,25 +33,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
-  MaterialColor _library = Colors.amber;
-  MaterialColor _explore = Colors.green;
 
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Library',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Explore',
-      style: optionStyle,
-    ),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void _onNavBarItemTapped(int index) {
     switch (index) {
       case 1:
         Navigator.pushReplacement(
@@ -69,10 +52,9 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
 
-
       bottomNavigationBar: CustomBottomNavigation(
-        selectedIndex: this._selectedIndex, 
-        onTap: _onItemTapped,),
+        selectedIndex: _selectedIndex, 
+        onTap: _onNavBarItemTapped,),
     );
   }
 }
