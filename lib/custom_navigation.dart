@@ -3,7 +3,7 @@ import 'package:flutter/scheduler.dart';
 
 class CustomBottomNavigation extends StatefulWidget {
 
-const CustomBottomNavigation({this.selectedIndex = 0, required this.onTap});
+const CustomBottomNavigation({super.key, this.selectedIndex = 0, required this.onTap});
 
 final int selectedIndex;
 final void Function(int) onTap;
@@ -63,11 +63,11 @@ Widget build(BuildContext context) {
           label: "Explore",
         ),
       ],
-      currentIndex: this.widget.selectedIndex,
+      currentIndex: widget.selectedIndex,
       selectedItemColor: Colors.amber[800],
       unselectedItemColor: Colors.green,
       onTap: widget.onTap,
-      backgroundColor: Colors.black87,
+      backgroundColor: Colors.black,
     );
   }
 }
