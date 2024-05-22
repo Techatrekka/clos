@@ -1,0 +1,19 @@
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- External files directory -->
+    <external-path
+        name="external_files"
+        path="/" />
+
+    <external-files-path
+        name="external_files"
+        path="/" />
+
+</paths>
+
+
+<!-- <files-path/>  Context.getFilesDir()
+<cache-path/> -> Context.getCacheDir()
+<external-path/> -> Environment.getExternalStorageDirectory()
+<external-files-path/> -> Context.getExternalFilesDir(String)
+<external-cache-path/> -> Context.getExternalCacheDir()
+<external-media-path/> -> Context.getExternalMediaDirs() -->

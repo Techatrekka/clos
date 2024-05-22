@@ -1,17 +1,7 @@
 import 'dart:io';
+import 'package:clos/models.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:xml/xml.dart';
-
-class AudioBook {
-  String audioFile;
-  String title;
-  String author;
-  String synopsis;
-  String id;
-  String iconLocation;
-  
-  AudioBook(this.audioFile, this.title, this.author, this.synopsis, this.id, this.iconLocation);
-}
 
 Future<List<AudioBook>> readBookManifest(String filePath) async {
   final file = File(filePath);
@@ -28,7 +18,7 @@ Future<List<AudioBook>> readBookManifest(String filePath) async {
       var audioFile = bookElement.findElements('audioFile').singleOrNull?.innerText;
       var iconLocation = bookElement.findElements('iconLocation').singleOrNull?.innerText;
       
-      return AudioBook(
+      return AudioBook.fromPosition(
         audioFile ?? "", 
         title ?? "", 
         author ?? "", 
@@ -43,7 +33,7 @@ Future<List<AudioBook>> readBookManifest(String filePath) async {
 }
 
 Future<void> writeToManifest(List<AudioBook> curretBooks) async {
- var directory = await getApplicationDocumentsDirectory();
+  var directory = await getApplicationDocumentsDirectory();
   var filePath = '${directory.path}/manifest.xml';
   var existingManifest = File(filePath);
   if (existingManifest.existsSync()) {
@@ -68,4 +58,11 @@ Future<void> writeToManifest(List<AudioBook> curretBooks) async {
 
   File(filePath).writeAsStringSync(document.toXmlString());
   print('XML file created successfully at: $filePath');
+}
+
+void placeAudioFile(File audio, String id) async {
+  var directory = await getApplicationDocumentsDirectory();
+  var filePath = '${directory.path}/$id';
+  audio.copy(filePath);
+  audio.create(recursive: true, exclusive: false);
 }

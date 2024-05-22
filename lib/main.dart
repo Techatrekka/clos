@@ -1,12 +1,18 @@
 import 'package:clos/custom_app_bar.dart';
 import 'package:clos/custom_navigation.dart';
 import 'package:clos/library_list_tile.dart';
-import 'package:clos/explore.dart';
-import 'package:clos/utils.dart';
+import 'package:clos/explore_screen.dart';
+import 'package:clos/models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  FlutterDownloader.initialize(
+    debug: true, // optional: set to false to disable printing logs to console (default: true)
+    ignoreSsl: true // option: set to false to disable working with http links (default: false)
+  );
   runApp(const MyApp());
 }
 
@@ -37,9 +43,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final int _selectedIndex = 0;
-  final List<AudioBook> books = [(AudioBook("audioFile", "title", "author", "synopsis", "id", "images/clos_logo.png")),
-  (AudioBook("audioFile", "title", "author", "synopsis", "id", "images/clos_logo.png")),
-  (AudioBook("audioFile", "title", "author", "synopsis", "id", "images/clos_logo.png"))];
+  final List<AudioBook> books = [(AudioBook.fromPosition("audioFile", "title", "author", "synopsis", "id", "images/clos_logo.png")),
+  (AudioBook.fromPosition("audioFile", "title", "author", "synopsis", "id", "images/clos_logo.png")),
+  (AudioBook.fromPosition("audioFile", "title", "author", "synopsis", "id", "images/clos_logo.png"))];
 
   void _onNavBarItemTapped(int index) {
     switch (index) {
@@ -54,8 +60,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  // void 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
           itemCount: books.length,
           itemBuilder: (context, index) {
             final book = books[index];
-            return homeTile(book.title, book.author, book.iconLocation);
+            return imageTile(book.title, book.author, book.iconLocation);
           },
         ),
       ),
