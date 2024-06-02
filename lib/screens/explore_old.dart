@@ -1,9 +1,9 @@
-import 'package:clos/custom_app_bar.dart';
-import 'package:clos/custom_navigation.dart';
-import 'package:clos/library_list_tile.dart';
+import 'package:clos/widgets/custom_app_bar.dart';
+import 'package:clos/widgets/custom_navigation.dart';
+import 'package:clos/widgets/library_list_tile.dart';
 import 'package:clos/main.dart';
-import 'package:clos/models.dart';
-import 'package:clos/network.dart';
+import 'package:clos/utils/models.dart';
+import 'package:clos/utils/network.dart';
 import 'package:flutter/material.dart';
 
 class ExploreScreen extends StatefulWidget {

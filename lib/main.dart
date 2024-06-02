@@ -1,8 +1,9 @@
-import 'package:clos/custom_app_bar.dart';
-import 'package:clos/custom_navigation.dart';
-import 'package:clos/library_list_tile.dart';
-import 'package:clos/explore_screen.dart';
-import 'package:clos/models.dart';
+import 'package:clos/screens/audioplayer_screen.dart';
+import 'package:clos/widgets/custom_app_bar.dart';
+import 'package:clos/widgets/custom_navigation.dart';
+import 'package:clos/widgets/library_list_tile.dart';
+import 'package:clos/screens/explore_screen.dart';
+import 'package:clos/utils/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 
@@ -60,6 +61,19 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void _onImageTileTapped() {
+    // switch (index) {
+    //   case 1:
+        Navigator.push(
+          context, 
+          MaterialPageRoute(
+            builder: (_) => const PlayerScreen(),
+          ),
+        );
+    //     break;
+    // }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
           itemCount: books.length,
           itemBuilder: (context, index) {
             final book = books[index];
-            return imageTile(book.title, book.author, book.iconLocation);
+            return imageTile(book.title, book.author, book.iconLocation, _onImageTileTapped);
           },
         ),
       ),

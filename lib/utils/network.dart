@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:clos/models.dart';
+import 'package:clos/utils/models.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -19,9 +19,11 @@ void fetchStrings() async {
 
 
 Future<List<AudioBook>> fetchAudioBookList() async {
-  var response = await http.get(Uri.parse('http://192.168.42.192:8080/audio.mp3'));
+  var response = await http.get(Uri.parse('http://192.168.42.192:8080/catalog/title'));
+  print(response.body);
   if (response.statusCode == 200) {
     List<dynamic> result = jsonDecode(response.body);
+    print(result.length);
     return result.map((json) => AudioBook.fromJson(json)).toList();
   } else {
     throw Exception('Failed to load album');

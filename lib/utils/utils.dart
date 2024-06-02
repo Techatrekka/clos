@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:clos/models.dart';
+import 'package:clos/utils/models.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:xml/xml.dart';
 

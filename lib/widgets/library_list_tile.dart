@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-ListTile imageTile(String title, String author, String thumbnail) {
+ListTile imageTile(String title, String author, String thumbnail, void Function() onTap) {
   return ListTile(
     title: Center (
       child: Column(
@@ -25,7 +25,8 @@ ListTile imageTile(String title, String author, String thumbnail) {
         ],
       ),
     ),
-    minVerticalPadding: 30,
+    minVerticalPadding: 20,
+    onTap: onTap,
     // shape: BeveledRectangleBorder(
     //   borderRadius: BorderRadius.circular(10),
     // ),
