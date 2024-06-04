@@ -2,7 +2,11 @@
 // More advanced examples demonstrating other features can be found in the same
 // directory as this example in the GitHub repository.
 
+import 'dart:ffi';
+import 'dart:io';
+
 import 'package:audio_session/audio_session.dart';
+import 'package:clos/utils/models.dart';
 import 'package:clos/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +16,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PlayerScreen extends StatefulWidget {
-  const PlayerScreen({super.key});
+  PlayerScreen({super.key, required this.audiobook});
+
+  final AudioBook audiobook;
 
   @override
   PlayerScreenState createState() => PlayerScreenState();
@@ -20,6 +26,7 @@ class PlayerScreen extends StatefulWidget {
 
 class PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver {
   final _player = AudioPlayer();
+  late AudioBook _audioBook;
 
   @override
   void initState() {
@@ -28,14 +35,20 @@ class PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.black,
     ));
+    _audioBook = widget.audiobook;
     _init();
   }
 
   Future<void> _init() async {
-    // Inform the operating system of our app's audio attributes etc.
-    // We pick a reasonable default for an app that plays speech.
+    final directory = await getApplicationDocumentsDirectory();
+    var length = await directory.list().length;
+    var audioFiles = [];
+    for (var i = 1; i <= length; i++) {
+      audioFiles.add("${_audioBook.id}/$i.mp3");
+    }
+
     final session = await AudioSession.instance;
-    await session.configure(const AudioSessionConfiguration.music());
+    await session.configure(const AudioSessionConfiguration.speech());
     // Listen to errors during playback.
     _player.playbackEventStream.listen((event) {},
         onError: (Object e, StackTrace stackTrace) {
@@ -43,15 +56,24 @@ class PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver 
     });
     // Try to load audio from a source and catch any errors.
     try {
-      var filepath = (await getDownloadsDirectory())!.absolute.path;
+      var _playlist = ConcatenatingAudioSource(
+        children: []
+      );
+      for (int i = 0; i < audioFiles.length; i++) {
+        _playlist.add(AudioSource.uri(Uri.parse(audioFiles.elementAt(i).audioFile)));
+      }
+      
+      // var filepath = (await getDownloadsDirectory())!.absolute.path;
       // AAC example: https://dl.espressif.com/dl/audio/ff-16b-2c-44100hz.aac
      // await _player.load();
       await _player.setAudioSource(
-        AudioSource.uri(Uri.parse(
-         "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"
+        // AudioSource.uri(Uri.parse(
+        //  "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"
         // "https://dl.espressif.com/dl/audio/ff-16b-2c-44100hz.aac"
-        ))
+        // ))
        // AudioSource.file(filepath + "/audio.mp3")
+        // AudioSource.file(filepath + "/1/0001.mp3")
+        _playlist
           );
     } on PlayerException catch (e) {
       print("Error loading audio source: $e");

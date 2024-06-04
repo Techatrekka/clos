@@ -62,16 +62,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _onImageTileTapped() {
-    // switch (index) {
-    //   case 1:
-        Navigator.push(
-          context, 
-          MaterialPageRoute(
-            builder: (_) => const PlayerScreen(),
-          ),
-        );
-    //     break;
-    // }
+    var audiobook = AudioBook.fromPosition("audioFile", "title", "author", "synopsis", "id", "iconLocation");
+    Navigator.push(
+      context, 
+      MaterialPageRoute(
+        builder: (_) => PlayerScreen(audiobook: audiobook,),
+      ),
+    );
   }
 
   @override
