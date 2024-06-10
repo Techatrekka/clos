@@ -2,12 +2,13 @@
 // More advanced examples demonstrating other features can be found in the same
 // directory as this example in the GitHub repository.
 
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:audio_session/audio_session.dart';
+import 'package:clos/utils/common_functions.dart';
 import 'package:clos/utils/models.dart';
 import 'package:clos/widgets/custom_app_bar.dart';
+import 'package:clos/widgets/library_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
@@ -16,7 +17,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PlayerScreen extends StatefulWidget {
-  PlayerScreen({super.key, required this.audiobook});
+  const PlayerScreen({super.key, required this.audiobook});
 
   final AudioBook audiobook;
 
@@ -41,10 +42,11 @@ class PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver 
 
   Future<void> _init() async {
     final directory = await getApplicationDocumentsDirectory();
-    var length = await directory.list().length;
+    final newDirectory = Directory("${directory.path}/${_audioBook.id}/");
+    var length = await newDirectory.list().length;
     var audioFiles = [];
-    for (var i = 1; i <= length; i++) {
-      audioFiles.add("${_audioBook.id}/$i.mp3");
+    for (var i = 1; i < length; i++) {
+      audioFiles.add("${newDirectory.path}/$i.mp3");
     }
 
     final session = await AudioSession.instance;
@@ -56,11 +58,11 @@ class PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver 
     });
     // Try to load audio from a source and catch any errors.
     try {
-      var _playlist = ConcatenatingAudioSource(
+      var playlist = ConcatenatingAudioSource(
         children: []
       );
       for (int i = 0; i < audioFiles.length; i++) {
-        _playlist.add(AudioSource.uri(Uri.parse(audioFiles.elementAt(i).audioFile)));
+        playlist.add(AudioSource.file(audioFiles.elementAt(i)));
       }
       
       // var filepath = (await getDownloadsDirectory())!.absolute.path;
@@ -73,7 +75,7 @@ class PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver 
         // ))
        // AudioSource.file(filepath + "/audio.mp3")
         // AudioSource.file(filepath + "/1/0001.mp3")
-        _playlist
+        playlist
           );
     } on PlayerException catch (e) {
       print("Error loading audio source: $e");
@@ -96,6 +98,21 @@ class PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver 
       // if the app resumes later, it will still remember what position to
       // resume from.
       _player.stop();
+    }
+  }
+
+  Future<Image> _getImage() async {
+    Directory directory = await getApplicationDocumentsDirectory();
+    Directory newdirectory = Directory("${directory.path}/1");
+    print("directory contents");
+    print(directory.listSync());
+    print("directory contents");
+    print(newdirectory.listSync());
+    try {
+      var getFolder = await getApplicationDocumentsDirectory();
+      return Image.file(File("${getFolder.path}/1/image.png"));
+    } catch (e) {
+      return Image.asset("images/clos_logo.png");
     }
   }
 
@@ -122,7 +139,7 @@ class PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver 
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset("images/clos_logo.png"),
+                TryGetImageFile(_audioBook.iconLocation),
                 // Display play/pause button and volume/speed sliders.
                 ControlButtons(_player),
                 // Display seek bar. Using StreamBuilder, this widget rebuilds
@@ -155,6 +172,14 @@ class ControlButtons extends StatelessWidget {
 
   const ControlButtons(this.player, {super.key});
 
+  void seekNext() async{
+    await player.seekToNext();
+  }
+
+  void seekPrevious() async {
+    await player.seekToPrevious();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -177,7 +202,11 @@ class ControlButtons extends StatelessWidget {
             );
           },
         ),
-
+        IconButton(
+          icon: const Icon(Icons.skip_previous),
+          color: Colors.green,
+          onPressed: seekPrevious,
+        ),
         /// This StreamBuilder rebuilds whenever the player state changes, which
         /// includes the playing/paused state and also the
         /// loading/buffering/ready state. Depending on the state we show the
@@ -220,6 +249,11 @@ class ControlButtons extends StatelessWidget {
               );
             }
           },
+        ),
+        IconButton(
+          icon: const Icon(Icons.skip_next),
+          color: Colors.green,
+          onPressed: seekNext,
         ),
         // Opens speed slider dialog
         StreamBuilder<double>(

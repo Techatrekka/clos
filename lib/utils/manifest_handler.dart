@@ -3,9 +3,10 @@ import 'package:clos/utils/models.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:xml/xml.dart';
 
-Future<List<AudioBook>> readBookManifest(String filePath) async {
-  final file = File(filePath);
-  var books = null;
+Future<List<AudioBook>> readBookManifest() async {
+  Directory directory = await getApplicationDocumentsDirectory();
+  final file = File("${directory.path}/manifest.xml");
+  late List<AudioBook> books;
   try {
     final readDoc = file.readAsStringSync();
     final doc = XmlDocument.parse(readDoc);
@@ -29,7 +30,7 @@ Future<List<AudioBook>> readBookManifest(String filePath) async {
   } catch (e) {
     print('Error occurred while parsing XML: $e');
   }
-  return books ?? List.empty();
+  return books;
 }
 
 Future<void> writeToManifest(List<AudioBook> curretBooks) async {
@@ -51,6 +52,7 @@ Future<void> writeToManifest(List<AudioBook> curretBooks) async {
       XmlElement(XmlName('author'), [], [XmlText(element.author),]),
       XmlElement(XmlName('synopsis'), [], [XmlText(element.synopsis),]),
       XmlElement(XmlName('audioFile'), [], [XmlText(element.audioFile),]),
+      XmlElement(XmlName('iconLocation'), [], [XmlText(element.iconLocation),]),
       ]);
     library.children.add(book);
   }

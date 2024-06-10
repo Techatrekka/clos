@@ -10,13 +10,13 @@ class SeekBar extends StatefulWidget {
   final ValueChanged<Duration>? onChangeEnd;
 
   const SeekBar({
-    Key? key,
+    super.key,
     required this.duration,
     required this.position,
     required this.bufferedPosition,
     this.onChanged,
     this.onChangeEnd,
-  }) : super(key: key);
+  });
 
   @override
   SeekBarState createState() => SeekBarState();
@@ -155,7 +155,7 @@ void showSliderDialog({
   showDialog<void>(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text(title, textAlign: TextAlign.center, style: TextStyle(color:Colors.green),),
+      title: Text(title, textAlign: TextAlign.center, style: const TextStyle(color:Colors.green),),
       content: StreamBuilder<double>(
         stream: stream,
         builder: (context, snapshot) => SizedBox(

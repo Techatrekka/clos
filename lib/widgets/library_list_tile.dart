@@ -1,3 +1,4 @@
+import 'package:clos/utils/common_functions.dart';
 import 'package:flutter/material.dart';
 
 ListTile imageTile(String title, String author, String thumbnail, void Function() onTap) {
@@ -5,7 +6,7 @@ ListTile imageTile(String title, String author, String thumbnail, void Function(
     title: Center (
       child: Column(
         children: [
-          Image.asset(thumbnail),
+          TryGetImageFile(thumbnail),
           Text(
             title,
             style: const TextStyle(
@@ -27,9 +28,6 @@ ListTile imageTile(String title, String author, String thumbnail, void Function(
     ),
     minVerticalPadding: 20,
     onTap: onTap,
-    // shape: BeveledRectangleBorder(
-    //   borderRadius: BorderRadius.circular(10),
-    // ),
   );
 }
 

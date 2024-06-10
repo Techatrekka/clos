@@ -43,6 +43,7 @@ dependencies:
   rxdart: ^0.27.7
   just_audio: ^0.9.38
   audio_session: ^0.1.19
+  archive: ^3.6.1
 
 dev_dependencies:
   flutter_test:

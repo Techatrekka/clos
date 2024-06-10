@@ -1,4 +1,3 @@
-import 'package:clos/screens/audiobook_download_screen.dart';
 import 'package:clos/screens/explore_section_screen.dart';
 import 'package:clos/widgets/custom_app_bar.dart';
 import 'package:clos/widgets/custom_navigation.dart';
@@ -6,7 +5,6 @@ import 'package:clos/widgets/library_list_tile.dart';
 import 'package:clos/main.dart';
 import 'package:clos/utils/models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key, required this.title});
@@ -21,17 +19,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
   final int _selectedIndex = 1;
   final List<String> options = ["List.empty()","List.empty()","List.empty()"];
   final List<Section> headings = [
-    Section("title", "images/clos_logo.png"),
-    Section("title", "images/clos_logo.png"),
-    Section("title", "images/clos_logo.png"),
-    Section("title", "images/clos_logo.png"),];
-  // late Future<List<AudioBook>> offering;
-  
-  // @override
-  // void initState() {
-  //   super.initState();
-  //     offering = fetchAudioBookList();
-  // }
+    Section("ClosLeabhair ag teideal", "images/clos_logo.png"),
+    Section("Closleabhair ag t-Údar", "images/clos_logo.png"),
+    Section("Seanachaí", "images/clos_logo.png"),];
 
   void _onNavBarItemTapped(int index) {
     switch (index) {

@@ -171,7 +171,7 @@ class _AudioBookDownloadScreenState extends State<AudioBookDownloadScreen> {
                 height: 200,
                 ),
                 Container(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   child: const Column(
                     children: [
                       Text(
@@ -193,7 +193,7 @@ class _AudioBookDownloadScreenState extends State<AudioBookDownloadScreen> {
             ),
             Container(
               width: MediaQuery.of(context).size.width * 0.9,
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: OutlinedButton(
                 onPressed: _requestDownload,
                 child: const Text("Download"),
@@ -201,8 +201,8 @@ class _AudioBookDownloadScreenState extends State<AudioBookDownloadScreen> {
             ),
             Container(
               width: MediaQuery.of(context).size.width * 0.9,
-              padding: EdgeInsets.all(20),
-              child: Text(
+              padding: const EdgeInsets.all(20),
+              child: const Text(
                 "Synopsis",
                 textAlign: TextAlign.left,
                 style: TextStyle(
@@ -213,9 +213,9 @@ class _AudioBookDownloadScreenState extends State<AudioBookDownloadScreen> {
             ),
             Container(
               width: MediaQuery.of(context).size.width * 0.9,
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               color: Colors.black,
-              child: Text(
+              child: const Text(
                 "Synopsis",
                 style: TextStyle(
                   color: Colors.white
