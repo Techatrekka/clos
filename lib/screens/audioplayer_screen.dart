@@ -1,14 +1,8 @@
-// This is a minimal example demonstrating a play/pause button and a seek bar.
-// More advanced examples demonstrating other features can be found in the same
-// directory as this example in the GitHub repository.
-
 import 'dart:io';
-
 import 'package:audio_session/audio_session.dart';
 import 'package:clos/utils/common_functions.dart';
 import 'package:clos/utils/models.dart';
 import 'package:clos/widgets/custom_app_bar.dart';
-import 'package:clos/widgets/library_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
@@ -101,6 +95,7 @@ class PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver 
     }
   }
 
+  // test function
   Future<Image> _getImage() async {
     Directory directory = await getApplicationDocumentsDirectory();
     Directory newdirectory = Directory("${directory.path}/1");

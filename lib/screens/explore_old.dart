@@ -48,18 +48,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         color: const Color.fromRGBO(0, 0, 0, 0.867),
         width: 500,
         height: 1000,
-        child: 
-        // ListView.builder(
-        //   scrollDirection: Axis.vertical,
-        //   padding: const EdgeInsets.all(25),
-        //   clipBehavior: Clip.hardEdge,
-        //   itemCount: options.length,
-        //   itemBuilder: (context, index) {
-        //     final book = options[index];
-        //     return optionTile(book, book, _onOptionTileTouched);
-        //   }
-        // ),
-        FutureBuilder<List<AudioBook>> (
+        child: FutureBuilder<List<AudioBook>> (
           future: offering,
           initialData: [AudioBook.fromPosition("audioFile", "title", "author", "synopsis", "id", "iconLocation")],
           builder: (context, snapshot) {
@@ -73,16 +62,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   );
                 },
             );
-          } else {
-              return const CircularProgressIndicator();
-          }
-            // if (snapshot.hasData) {
-            //   return Text(snapshot.data!.title, style: TextStyle(color: Colors.white),);
-            // } else if (snapshot.hasError) {
-            //   return Text('${snapshot.error}', style: TextStyle(color: Colors.white),);
-            // }
-            // // By default, show a loading spinner.
-            // return const CircularProgressIndicator();
+            } else {
+                return const CircularProgressIndicator();
+            }
           },
         )
       ),

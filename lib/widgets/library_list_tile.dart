@@ -26,7 +26,7 @@ ListTile imageTile(String title, String author, String thumbnail, void Function(
         ],
       ),
     ),
-    minVerticalPadding: 20,
+    minVerticalPadding: 10,
     onTap: onTap,
   );
 }
@@ -48,10 +48,7 @@ ListTile sectionTile(String title, String thumbnail, void Function() onTap) {
         ],
       ),
     ),
-    minVerticalPadding: 30,
-    // shape: BeveledRectangleBorder(
-    //   borderRadius: BorderRadius.circular(10),
-    // ),
+    minVerticalPadding: 10,
     onTap: onTap,
   );
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:clos/utils/network.dart';
 import 'package:clos/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -143,16 +144,6 @@ class _AudioBookDownloadScreenState extends State<AudioBookDownloadScreen> {
         ?.send([id, status, progress]);
   }
 
-  Future<void> _requestDownload() async {
-    // create prepare folder for download
-    final task = await FlutterDownloader.enqueue(
-      url: "http://192.168.236.5:8080/downloadAudio/audio.mp3",
-      headers: {'auth': 'test_for_sql_encoding'},
-      savedDir: _localPath,
-      saveInPublicStorage: false,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -195,7 +186,7 @@ class _AudioBookDownloadScreenState extends State<AudioBookDownloadScreen> {
               width: MediaQuery.of(context).size.width * 0.9,
               padding: const EdgeInsets.all(20),
               child: OutlinedButton(
-                onPressed: _requestDownload,
+                onPressed: () => DownloadAudioFiles("1"),
                 child: const Text("Download"),
               )
             ),

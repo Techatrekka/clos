@@ -59,6 +59,7 @@ Future<void> writeToManifest(List<AudioBook> curretBooks) async {
   document.children.add(library);
 
   File(filePath).writeAsStringSync(document.toXmlString());
+  // this is a debug that will be important as it will let you know if there are permissions/other problems
   print('XML file created successfully at: $filePath');
 }
 

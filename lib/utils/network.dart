@@ -51,6 +51,7 @@ void fetchAudioFile() async {
   );
 }
 
+// test function
 Future<void> attemptSaveFile(String filename, List<int> bytes) async {
   bool hasPermission = await checkAndRequestStoragePermission();
   if (hasPermission) {
@@ -65,7 +66,7 @@ Future<void> attemptSaveFile(String filename, List<int> bytes) async {
   }
 }
 
-
+// test function
 Future<void> saveFileLocally(String filename, List<int> bytes) async {
   Directory directory = await getApplicationDocumentsDirectory();
   String path = directory.path + filename;
@@ -75,7 +76,7 @@ Future<void> saveFileLocally(String filename, List<int> bytes) async {
 }
 
 
-Future<void> downloadAudioFiles(String Id) async {
+void DownloadAudioFiles(String Id) async {
   Directory directory = await getApplicationDocumentsDirectory();
   Directory newdirectory = Directory("${directory.path}/$Id");
   await newdirectory.create();
@@ -94,4 +95,15 @@ Future<void> downloadAudioFiles(String Id) async {
   await extractFileToDisk("${directory.path}/archive.zip",newdirectory.path);
   print(directory.listSync());
   print(newdirectory.listSync());
+}
+
+// test function
+Future<void> _requestDownload() async {
+  // create prepare folder for download
+  final task = await FlutterDownloader.enqueue(
+    url: "http://192.168.236.5:8080/downloadAudio/audio.mp3",
+    headers: {'auth': 'test_for_sql_encoding'},
+    savedDir: "_localPath",
+    saveInPublicStorage: false,
+  );
 }

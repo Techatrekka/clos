@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:clos/screens/audioplayer_screen.dart';
-import 'package:clos/utils/network.dart';
 import 'package:clos/utils/manifest_handler.dart';
 import 'package:clos/widgets/custom_app_bar.dart';
 import 'package:clos/widgets/custom_navigation.dart';
@@ -66,22 +63,20 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void init() async {
-    icon = await _getImageString();
-    // books =  [(AudioBook.fromPosition("audioFile", "Is Gearr", "Marian Keyes", "synopsis", "1", icon)),
-    // (AudioBook.fromPosition("audioFile", "title", "author", "synopsis", "1", icon)),
-    // (AudioBook.fromPosition("audioFile", "title", "author", "synopsis", "1", icon))];
+    // icon = await _getImageString();
   }
 
+  // test function
   Future<String> _getImageString() async {
-    Directory directory = await getApplicationDocumentsDirectory();
-    Directory newdirectory = Directory("${directory.path}/1");
+    // Directory directory = await getApplicationDocumentsDirectory();
+    //Directory newdirectory = Directory("${directory.path}/1");
     // print("directory contents");
     // print(directory.listSync());
     // print("directory contents");
     // print(newdirectory.listSync());
     try {
       var getFolder = await getApplicationDocumentsDirectory();
-      print("${getFolder.path}/1/image.png");
+      // print("${getFolder.path}/1/image.png");
       return "${getFolder.path}/1/image.png";
     } catch (e) {
       return "Image.asset(images/clos_logo.png";
@@ -122,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               // While the future is still loading
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             } else if (snapshot.hasError) {
               // If the future completed with an error
               return Text('Error: ${snapshot.error}');
@@ -133,8 +128,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   final book = snapshot.data![index];
-                  print(book.iconLocation);
-                  print(book.id);
+                  // print(book.iconLocation);
+                  // print(book.id);
                   return imageTile(book.title, book.author, book.iconLocation, _onImageTileTapped);
                 }
               );
