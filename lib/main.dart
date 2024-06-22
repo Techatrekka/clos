@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:clos/screens/audiobook_download_screen.dart';
 import 'package:clos/screens/audioplayer_screen.dart';
 import 'package:clos/utils/manifest_handler.dart';
 import 'package:clos/widgets/custom_app_bar.dart';
@@ -16,9 +19,9 @@ Future<void> main() async {
     debug: true, // optional: set to false to disable printing logs to console (default: true)
     ignoreSsl: true // option: set to false to disable working with http links (default: false)
   );
-  late List<AudioBook> books = [(AudioBook.fromPosition("audioFile", "Is Gearr", "Marian Keyes", "synopsis", "1", "/data/user/0/com.example.clos/app_flutter/1/image.png")),
-    (AudioBook.fromPosition("audioFile", "title", "author", "synopsis", "1", "/data/user/0/com.example.clos/app_flutter/1/age.png")),
-    (AudioBook.fromPosition("audioFile", "title", "author", "synopsis", "1", "/data/user/0/com.example.clos/app_flutter/1/image.png"))];
+  late List<AudioBook> books = [(AudioBook.fromPosition("1", "Is Gearr", "Marian Keyes", "synopsis", "true", "/data/user/0/com.example.clos/app_flutter/1/image.png")),
+    (AudioBook.fromPosition("2", "title", "author", "synopsis", "true", "/data/user/0/com.example.clos/app_flutter/1/age.png")),
+    (AudioBook.fromPosition("3", "title", "author", "synopsis", "false", "/data/user/0/com.example.clos/app_flutter/1/image.png"))];
   await writeToManifest(books);
   runApp(const MyApp());
 }
@@ -35,6 +38,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Library'),
+      routes: {
+        // '/': (context) => HomePage(),
+        '/downloadpage': (context) => AudioBookDownloadScreen(),
+      },
     );
   }
 }
@@ -52,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final int _selectedIndex = 0;
   late Future<List<AudioBook>> books ;
   late String icon = "/data/user/0/com.example.clos/app_flutter/1/image.png";
+  Directory home = Directory("/data/user/0/com.example.clos/app_flutter/");
 
   @override
   void initState() {
@@ -63,6 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void init() async {
+    home = await getApplicationDocumentsDirectory();
     // icon = await _getImageString();
   }
 
@@ -97,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _onImageTileTapped() {
-    var audiobook = AudioBook.fromPosition("audioFile", "title", "author", "synopsis", "1", "iconLocation");
+    var audiobook = AudioBook.fromPosition("1", "title", "author", "synopsis", "true", "");
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -128,9 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   final book = snapshot.data![index];
-                  // print(book.iconLocation);
-                  // print(book.id);
-                  return imageTile(book.title, book.author, book.iconLocation, _onImageTileTapped);
+                  return imageTile(book.title, book.author, home.path, book.tapeId, _onImageTileTapped);
                 }
               );
             }

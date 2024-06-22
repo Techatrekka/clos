@@ -1,46 +1,46 @@
 class AudioBook {
-  final String audioFile;
+  final String tapeId;
   final String title;
   final String author;
   final String synopsis;
-  final String id;
-  final String iconLocation;
+  final String isAudiobook;
+  final String tags;
   
   const AudioBook( {
-    required this.audioFile, 
+    required this.tapeId, 
     required this.title,
     required this.author, 
     required this.synopsis, 
-    required this.id, 
-    required this.iconLocation});
+    required this.isAudiobook, 
+    required this.tags});
 
-  factory AudioBook.fromPosition(audioFile, title, author, synopsis, id, iconLocation) {
+  factory AudioBook.fromPosition(tapeId, title, author, synopsis, isAudiobook, tags) {
     return AudioBook(
-      audioFile: audioFile,
+      tapeId: tapeId,
       title: title,
       author: author,
       synopsis: synopsis,
-      id: id,
-      iconLocation: iconLocation);
+      isAudiobook: isAudiobook,
+      tags: tags);
   }
 
   factory AudioBook.fromJson(Map<String, dynamic> json) {
     return switch (json) {
       {
-        'audioFile': String audioFile,
+        'tape_id': String tapeId,
         'title': String title,
         'author': String author,
         'synopsis': String synopsis,
-        'id': String id,
-        'iconLocation': String iconLocation,
+        'is_audiobook': String isAudiobook,
+        'tags': String tags,
       } =>
         AudioBook(
-          audioFile: audioFile,
+          tapeId: tapeId,
           title: title,
           author: author,
           synopsis: synopsis,
-          id: id,
-          iconLocation: iconLocation,
+          isAudiobook: isAudiobook,
+          tags: tags,
         ),
       _ => throw const FormatException('Failed to load audiobook.'),
     };

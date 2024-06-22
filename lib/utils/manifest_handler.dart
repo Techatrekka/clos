@@ -12,20 +12,20 @@ Future<List<AudioBook>> readBookManifest() async {
     final doc = XmlDocument.parse(readDoc);
     
     books = doc.findAllElements('book').map((XmlElement bookElement) {
-      var id = bookElement.findElements('id').singleOrNull?.innerText;
+      var tapeId = bookElement.findElements('tape_id').singleOrNull?.innerText;
       var title = bookElement.findElements('title').singleOrNull?.innerText;
       var author = bookElement.findElements('author').singleOrNull?.innerText;
       var synopsis = bookElement.findElements('synopsis').singleOrNull?.innerText;
-      var audioFile = bookElement.findElements('audioFile').singleOrNull?.innerText;
-      var iconLocation = bookElement.findElements('iconLocation').singleOrNull?.innerText;
+      var isAudiobook = bookElement.findElements('is_audiobook').singleOrNull?.innerText;
+      var tags = bookElement.findElements('tags').singleOrNull?.innerText;
       
       return AudioBook.fromPosition(
-        audioFile ?? "", 
+        tapeId ?? "", 
         title ?? "", 
         author ?? "", 
         synopsis ?? "", 
-        id ?? "", 
-        iconLocation ?? "");
+        isAudiobook ?? "", 
+        tags ?? "");
     }).toList();
   } catch (e) {
     print('Error occurred while parsing XML: $e');
@@ -47,12 +47,12 @@ Future<void> writeToManifest(List<AudioBook> curretBooks) async {
   for (var element in curretBooks) { 
     final book = XmlElement(XmlName("book"), 
       [], [
-      XmlElement(XmlName('id'), [], [XmlText(element.id),]),
+      XmlElement(XmlName('tape_id'), [], [XmlText(element.tapeId),]),
       XmlElement(XmlName('title'), [], [XmlText(element.title),]),
       XmlElement(XmlName('author'), [], [XmlText(element.author),]),
       XmlElement(XmlName('synopsis'), [], [XmlText(element.synopsis),]),
-      XmlElement(XmlName('audioFile'), [], [XmlText(element.audioFile),]),
-      XmlElement(XmlName('iconLocation'), [], [XmlText(element.iconLocation),]),
+      XmlElement(XmlName('is_audiobook'), [], [XmlText(element.isAudiobook),]),
+      XmlElement(XmlName('tags'), [], [XmlText(element.tags),]),
       ]);
     library.children.add(book);
   }

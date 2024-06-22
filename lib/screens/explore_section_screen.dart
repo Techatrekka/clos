@@ -15,23 +15,16 @@ class ExploreSectionScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreSectionScreen> {
-  final List<String> options = ["List.empty()","List.empty()","List.empty()"];
   late Future<List<AudioBook>> offering;
   
   @override
   void initState() {
     super.initState();
-      offering = fetchAudioBookList();
-  }
-
-  void _onOptionTileTouched() {
-    Navigator.push(
-      context, 
-      MaterialPageRoute(builder: (_) => const AudioBookDownloadScreen(sectionTitle: 'Library')));
   }
 
  @override
   Widget build(BuildContext context) {
+    offering = fetchAudioBookList();
     return Scaffold(
       appBar: const CustomAppBar(title: "Explore"),
       body: Container(
@@ -48,8 +41,37 @@ class _ExploreScreenState extends State<ExploreSectionScreen> {
                 itemCount: snapshot.data?.length ?? 0,
                 itemBuilder: (context, index) {
                   var currentEntry = snapshot.data!;
-                  return optionTile(
-                    currentEntry[index].audioFile, currentEntry[index].title, _onOptionTileTouched
+                  return ListTile(
+                    title: Center (
+                      child: Column(
+                        children: [
+                          Text(
+                            currentEntry[index].title,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 30,
+                              color: Color.fromARGB(230, 255, 255, 255),
+                            ),
+                          ),
+                          Text(
+                            currentEntry[index].author,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                              color: Colors.white70,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    minVerticalPadding: 30,
+                    onTap: () {
+                      Navigator.pushNamed(
+                      context,
+                      '/downloadpage',
+                      arguments: currentEntry[index],
+                    );
+                    },
                   );
                 },
               );

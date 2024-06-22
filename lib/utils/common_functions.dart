@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-Image TryGetImageFile(String file) {
+Image TryGetImageFile(String directoryPath, String id) {  
+  Directory home = Directory(directoryPath);
   try {
-    var image = File(file);
+    var image = File("${home.path}/$id/image.png");
     if (image.existsSync()) {
       return Image.file(image);
     }

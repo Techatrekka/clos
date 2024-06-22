@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:clos/utils/models.dart';
 import 'package:clos/utils/network.dart';
 import 'package:clos/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +28,12 @@ class TaskInfo {
 }
 
 class AudioBookDownloadScreen extends StatefulWidget {
-  const AudioBookDownloadScreen({super.key, 
-  required this.sectionTitle,});
+  const AudioBookDownloadScreen({super.key, });
+  // required this.sectionTitle,
+  // required this.tapeId});
 
-  final String sectionTitle;
+  // final String sectionTitle;
+  // final String tapeId;
 
   @override
   State<AudioBookDownloadScreen> createState() => _AudioBookDownloadScreenState();
@@ -43,9 +46,7 @@ class _AudioBookDownloadScreenState extends State<AudioBookDownloadScreen> {
   @override
   void initState() {
     super.initState();
-
     _bindBackgroundIsolate();
-
     FlutterDownloader.registerCallback(downloadCallback, step: 1);
 
     // _showContent = false;
@@ -146,6 +147,8 @@ class _AudioBookDownloadScreenState extends State<AudioBookDownloadScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AudioBook book = ModalRoute.of(context)!.settings.arguments as AudioBook;
+
     return Scaffold(
       appBar: const CustomAppBar(title: "sectionTitle"),
       body: Container(
@@ -186,7 +189,7 @@ class _AudioBookDownloadScreenState extends State<AudioBookDownloadScreen> {
               width: MediaQuery.of(context).size.width * 0.9,
               padding: const EdgeInsets.all(20),
               child: OutlinedButton(
-                onPressed: () => DownloadAudioFiles("1"),
+                onPressed: () => DownloadAudioFiles(book.tapeId),
                 child: const Text("Download"),
               )
             ),

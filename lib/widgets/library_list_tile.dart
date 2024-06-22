@@ -1,12 +1,13 @@
 import 'package:clos/utils/common_functions.dart';
+import 'package:clos/utils/models.dart';
 import 'package:flutter/material.dart';
 
-ListTile imageTile(String title, String author, String thumbnail, void Function() onTap) {
+ListTile imageTile(String title, String author, String homeDirectory, String id, void Function() onTap) {
   return ListTile(
     title: Center (
       child: Column(
         children: [
-          TryGetImageFile(thumbnail),
+          TryGetImageFile(homeDirectory, id),
           Text(
             title,
             style: const TextStyle(
@@ -53,7 +54,7 @@ ListTile sectionTile(String title, String thumbnail, void Function() onTap) {
   );
 }
 
-ListTile optionTile(String title, String author, void Function() onTap) {
+ListTile optionTile(String title, String author, AudioBook t, BuildContext context) {
   return ListTile(
     title: Center (
       child: Column(
@@ -78,6 +79,12 @@ ListTile optionTile(String title, String author, void Function() onTap) {
       ),
     ),
     minVerticalPadding: 30,
-    onTap: onTap,
+    onTap: () {
+      Navigator.pushNamed(
+      context,
+      '/downloadpage',
+      arguments: t,
+     );
+    },
   );
 }

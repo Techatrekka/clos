@@ -22,6 +22,7 @@ class PlayerScreen extends StatefulWidget {
 class PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver {
   final _player = AudioPlayer();
   late AudioBook _audioBook;
+  Directory home = Directory("path");
 
   @override
   void initState() {
@@ -36,7 +37,8 @@ class PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver 
 
   Future<void> _init() async {
     final directory = await getApplicationDocumentsDirectory();
-    final newDirectory = Directory("${directory.path}/${_audioBook.id}/");
+    home = directory;
+    final newDirectory = Directory("${directory.path}/${_audioBook.tapeId}/");
     var length = await newDirectory.list().length;
     var audioFiles = [];
     for (var i = 1; i < length; i++) {
@@ -134,7 +136,7 @@ class PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver 
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TryGetImageFile(_audioBook.iconLocation),
+                TryGetImageFile(home.path,"1"),
                 // Display play/pause button and volume/speed sliders.
                 ControlButtons(_player),
                 // Display seek bar. Using StreamBuilder, this widget rebuilds
