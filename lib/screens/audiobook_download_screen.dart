@@ -29,11 +29,6 @@ class TaskInfo {
 
 class AudioBookDownloadScreen extends StatefulWidget {
   const AudioBookDownloadScreen({super.key, });
-  // required this.sectionTitle,
-  // required this.tapeId});
-
-  // final String sectionTitle;
-  // final String tapeId;
 
   @override
   State<AudioBookDownloadScreen> createState() => _AudioBookDownloadScreenState();
@@ -189,7 +184,7 @@ class _AudioBookDownloadScreenState extends State<AudioBookDownloadScreen> {
               width: MediaQuery.of(context).size.width * 0.9,
               padding: const EdgeInsets.all(20),
               child: OutlinedButton(
-                onPressed: () => DownloadAudioFiles(book.tapeId),
+                onPressed: () => DownloadAudioFiles(book),
                 child: const Text("Download"),
               )
             ),

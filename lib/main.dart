@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:clos/screens/audiobook_download_screen.dart';
 import 'package:clos/screens/audioplayer_screen.dart';
+import 'package:clos/utils/common_functions.dart';
 import 'package:clos/utils/manifest_handler.dart';
 import 'package:clos/widgets/custom_app_bar.dart';
 import 'package:clos/widgets/custom_navigation.dart';
-import 'package:clos/widgets/library_list_tile.dart';
 import 'package:clos/screens/explore_screen.dart';
 import 'package:clos/utils/models.dart';
 import 'package:flutter/material.dart';
@@ -19,10 +19,10 @@ Future<void> main() async {
     debug: true, // optional: set to false to disable printing logs to console (default: true)
     ignoreSsl: true // option: set to false to disable working with http links (default: false)
   );
-  late List<AudioBook> books = [(AudioBook.fromPosition("1", "Is Gearr", "Marian Keyes", "synopsis", "true", "/data/user/0/com.example.clos/app_flutter/1/image.png")),
-    (AudioBook.fromPosition("2", "title", "author", "synopsis", "true", "/data/user/0/com.example.clos/app_flutter/1/age.png")),
-    (AudioBook.fromPosition("3", "title", "author", "synopsis", "false", "/data/user/0/com.example.clos/app_flutter/1/image.png"))];
-  await writeToManifest(books);
+  // late List<AudioBook> books = [(AudioBook.fromPosition("1", "Is Gearr", "Marian Keyes", "synopsis", "true", "/data/user/0/com.example.clos/app_flutter/1/image.png")),
+  //   (AudioBook.fromPosition("2", "title", "author", "synopsis", "true", "/data/user/0/com.example.clos/app_flutter/1/age.png")),
+  //   (AudioBook.fromPosition("3", "title", "author", "synopsis", "false", "/data/user/0/com.example.clos/app_flutter/1/image.png"))];
+  // await writeToManifest(books);
   runApp(const MyApp());
 }
 
@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
       routes: {
         // '/': (context) => HomePage(),
         '/downloadpage': (context) => AudioBookDownloadScreen(),
+        '/playerpage': (context) => PlayerScreen(),
       },
     );
   }
@@ -57,39 +58,19 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final int _selectedIndex = 0;
-  late Future<List<AudioBook>> books ;
-  late String icon = "/data/user/0/com.example.clos/app_flutter/1/image.png";
+  late Future<List<AudioBook>> books;
   Directory home = Directory("/data/user/0/com.example.clos/app_flutter/");
 
   @override
   void initState() {
     super.initState();
     books = readBookManifest();
-    // downloadAudioFiles("1");
-   // fetchAudioBook("1");
-   init();
+    init();
+    // createManifestWhereNoneDetected();
   }
 
   void init() async {
     home = await getApplicationDocumentsDirectory();
-    // icon = await _getImageString();
-  }
-
-  // test function
-  Future<String> _getImageString() async {
-    // Directory directory = await getApplicationDocumentsDirectory();
-    //Directory newdirectory = Directory("${directory.path}/1");
-    // print("directory contents");
-    // print(directory.listSync());
-    // print("directory contents");
-    // print(newdirectory.listSync());
-    try {
-      var getFolder = await getApplicationDocumentsDirectory();
-      // print("${getFolder.path}/1/image.png");
-      return "${getFolder.path}/1/image.png";
-    } catch (e) {
-      return "Image.asset(images/clos_logo.png";
-    }
   }
 
   void _onNavBarItemTapped(int index) {
@@ -105,21 +86,13 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void _onImageTileTapped() {
-    var audiobook = AudioBook.fromPosition("1", "title", "author", "synopsis", "true", "");
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => PlayerScreen(audiobook: audiobook,),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: "Library"),
       body: Container(
+        height: 1500,
+        width: 1500,
         color: Colors.black87,
         child: FutureBuilder<List<AudioBook>>(
           future: books,
@@ -129,15 +102,59 @@ class _MyHomePageState extends State<MyHomePage> {
               return const CircularProgressIndicator();
             } else if (snapshot.hasError) {
               // If the future completed with an error
-              return Text('Error: ${snapshot.error}');
+              // return Text('Error: ${snapshot.error}');
+              return 
+                const Flex(
+                  direction: Axis.vertical,
+                  children: [ Expanded(child: 
+                    Text(
+                      "Please add to Library",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 30,
+                          color: Color.fromARGB(230, 255, 255, 255),
+                        ),
+                      )
+                    )
+                  ],
+                );
             } else {
-              // If the future completed with a result
-              // return Text('Result: ${snapshot.data}');
               return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   final book = snapshot.data![index];
-                  return imageTile(book.title, book.author, home.path, book.tapeId, _onImageTileTapped);
+                  return ListTile(
+                    title: Center (
+                      child: Column(
+                        children: [
+                          TryGetImageFile(home.path, book.tapeId),
+                          Text(
+                            book.title,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 30,
+                              color: Color.fromARGB(230, 255, 255, 255),
+                            ),
+                          ),
+                          Text(
+                            book.author,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                              color: Colors.white70,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    minVerticalPadding: 10,
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/playerpage',
+                        arguments: book);
+                    },
+                  );
                 }
               );
             }

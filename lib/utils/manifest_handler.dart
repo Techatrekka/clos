@@ -28,7 +28,7 @@ Future<List<AudioBook>> readBookManifest() async {
         tags ?? "");
     }).toList();
   } catch (e) {
-    print('Error occurred while parsing XML: $e');
+    return [];
   }
   return books;
 }
@@ -68,4 +68,11 @@ void placeAudioFile(File audio, String id) async {
   var filePath = '${directory.path}/$id';
   audio.copy(filePath);
   audio.create(recursive: true, exclusive: false);
+}
+
+void createManifestWhereNoneDetected() async {
+  var directory = await getApplicationDocumentsDirectory();
+  var exemptFolders = {"flutter_assets"};
+  var files = await directory.list().toList();
+  print(files.first.path.toString().split("/").last);
 }

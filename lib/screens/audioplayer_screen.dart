@@ -11,9 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PlayerScreen extends StatefulWidget {
-  const PlayerScreen({super.key, required this.audiobook});
-
-  final AudioBook audiobook;
+  const PlayerScreen({super.key,});
 
   @override
   PlayerScreenState createState() => PlayerScreenState();
@@ -22,7 +20,7 @@ class PlayerScreen extends StatefulWidget {
 class PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver {
   final _player = AudioPlayer();
   late AudioBook _audioBook;
-  Directory home = Directory("path");
+  late Future<Directory> home;
 
   @override
   void initState() {
@@ -31,13 +29,14 @@ class PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.black,
     ));
-    _audioBook = widget.audiobook;
+    home = getApplicationDocumentsDirectory();
     _init();
   }
 
   Future<void> _init() async {
     final directory = await getApplicationDocumentsDirectory();
-    home = directory;
+    final AudioBook book = ModalRoute.of(context)!.settings.arguments as AudioBook;
+    _audioBook = book;
     final newDirectory = Directory("${directory.path}/${_audioBook.tapeId}/");
     var length = await newDirectory.list().length;
     var audioFiles = [];
@@ -97,22 +96,6 @@ class PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver 
     }
   }
 
-  // test function
-  Future<Image> _getImage() async {
-    Directory directory = await getApplicationDocumentsDirectory();
-    Directory newdirectory = Directory("${directory.path}/1");
-    print("directory contents");
-    print(directory.listSync());
-    print("directory contents");
-    print(newdirectory.listSync());
-    try {
-      var getFolder = await getApplicationDocumentsDirectory();
-      return Image.file(File("${getFolder.path}/1/image.png"));
-    } catch (e) {
-      return Image.asset("images/clos_logo.png");
-    }
-  }
-
   /// Collects the data useful for displaying in a seek bar, using a handy
   /// feature of rx_dart to combine the 3 streams of interest into one.
   Stream<PositionData> get _positionDataStream =>
@@ -123,8 +106,15 @@ class PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver 
           (position, bufferedPosition, duration) => PositionData(
               position, bufferedPosition, duration ?? Duration.zero));
 
+  Future<File> _getLocalFile(String filename) async {
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    File f = File("$dir/$filename/image.png");
+    return f;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final AudioBook book = ModalRoute.of(context)!.settings.arguments as AudioBook;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -136,7 +126,12 @@ class PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver 
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TryGetImageFile(home.path,"1"),
+                FutureBuilder(
+                  future: _getLocalFile(book.tapeId),
+                  builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
+                    return TryGetFutureImageFile(context, snapshot);
+                  }
+                ),
                 // Display play/pause button and volume/speed sliders.
                 ControlButtons(_player),
                 // Display seek bar. Using StreamBuilder, this widget rebuilds

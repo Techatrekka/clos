@@ -16,6 +16,16 @@ Image TryGetImageFile(String directoryPath, String id) {
   }
 }
 
+dynamic TryGetFutureImageFile(BuildContext context, AsyncSnapshot<File> snapshot) {
+  try {
+    if (File(snapshot.data!.path).existsSync()) {
+    return snapshot.data != null ? Image.file(snapshot.data!) : Image.asset("images/clos_logo.png");
+    }
+  } catch (e) {
+    return Image.asset("images/clos_logo.png");
+  }
+}
+
 Future<bool> checkAndRequestStoragePermission() async {
   var status = await Permission.storage.status;
   if (!status.isGranted) {

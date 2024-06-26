@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:clos/utils/common_functions.dart';
+import 'package:clos/utils/manifest_handler.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:clos/utils/models.dart';
 import 'package:http/http.dart' as http;
@@ -77,26 +78,27 @@ Future<void> saveFileLocally(String filename, List<int> bytes) async {
 }
 
 
-void DownloadAudioFiles(String Id) async {
+void DownloadAudioFiles(AudioBook book) async {
+  String Id = book.tapeId;
+  var currentList = await readBookManifest();
+  currentList.add(book);
+  await writeToManifest(currentList);
   Directory directory = await getApplicationDocumentsDirectory();
   Directory newdirectory = Directory("${directory.path}/$Id");
   await newdirectory.create();
-  // print("directory contents");
-  // print(directory.listSync());
-  // print("directory contents");
-  // print(newdirectory.listSync());
   final taskId = await FlutterDownloader.enqueue(
     url: "$networkURl/download/$Id",
-    fileName: "archive.zip", // optional: header send with url (auth token etc)
+    fileName: "archive-$Id.zip", // optional: header send with url (auth token etc)
     savedDir: directory.path,
     saveInPublicStorage: false,
-    showNotification: true, // show download progress in status bar (for Android)
-    openFileFromNotification: true, // click on notification to open downloaded file (for Android)
+    showNotification: false, // show download progress in status bar (for Android)
+    openFileFromNotification: false, // click on notification to open downloaded file (for Android)
   );
+  await Future.delayed(Duration(seconds: 10));
+  await extractFileToDisk("${directory.path}/archive-$Id.zip",newdirectory.path);
   await Future.delayed(Duration(seconds: 3));
-  await extractFileToDisk("${directory.path}/archive.zip",newdirectory.path);
-  // print(directory.listSync());
-  // print(newdirectory.listSync());
+  File file = File("${directory.path}/archive-$Id.zip");
+  file.deleteSync();
 }
 
 // test function
