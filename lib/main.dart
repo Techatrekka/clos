@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:clos/screens/audiobook_download_screen.dart';
 import 'package:clos/screens/audioplayer_screen.dart';
+import 'package:clos/services/service_locator.dart';
 import 'package:clos/utils/common_functions.dart';
 import 'package:clos/utils/manifest_handler.dart';
 import 'package:clos/widgets/custom_app_bar.dart';
@@ -14,6 +15,7 @@ import 'package:path_provider/path_provider.dart';
 
 
 Future<void> main() async {
+  await setupServiceLocator();
   WidgetsFlutterBinding.ensureInitialized();
   FlutterDownloader.initialize(
     debug: true, // optional: set to false to disable printing logs to console (default: true)
@@ -41,7 +43,7 @@ class MyApp extends StatelessWidget {
       routes: {
         // '/': (context) => HomePage(),
         '/downloadpage': (context) => AudioBookDownloadScreen(),
-        '/playerpage': (context) => PlayerScreen(),
+        // '/playerpage': (context) => PlayerScreen(),
       },
     );
   }
@@ -149,10 +151,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     minVerticalPadding: 10,
                     onTap: () {
-                      Navigator.pushNamed(
+                      Navigator.push(
                         context,
-                        '/playerpage',
-                        arguments: book);
+                        MaterialPageRoute(builder: (context) => PlayerScreen(tapeId: book.tapeId,)));
                     },
                   );
                 }

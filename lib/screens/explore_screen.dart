@@ -18,8 +18,8 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   final int _selectedIndex = 1;
   final List<Section> headings = [
-    Section("ClosLeabhair ag teideal", "images/book_section_image.png"),
-    Section("Closleabhair ag t-Údar", "images/author_section_image.png"),
+    Section("ClosLeabhair", "images/book_section_image.png"),
+    //Section("Closleabhair ag t-Údar", "images/author_section_image.png"),
     Section("Seanachaí", "images/seanachai_section_image.png"),];
 
   void _onNavBarItemTapped(int index) {
@@ -49,7 +49,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           children: [
             sectionTile(headings[0].title, headings[0].iconLocation, _onSectionTileTouched),
             sectionTile(headings[1].title, headings[1].iconLocation, _onSectionTileTouched),
-            sectionTile(headings[2].title, headings[2].iconLocation, _onSectionTileTouched),
+            // sectionTile(headings[2].title, headings[2].iconLocation, _onSectionTileTouched),
           ],
         ),
       ),

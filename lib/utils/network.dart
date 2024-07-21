@@ -8,7 +8,7 @@ import 'package:clos/utils/models.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
-var networkURl = "http://192.168.1.2:8080";
+var networkURl = "http://192.168.1.11:8080";
 
 //test function
 void fetchStrings() async {

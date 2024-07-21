@@ -42,8 +42,12 @@ dependencies:
   permission_handler: ^11.3.1
   rxdart: ^0.27.7
   just_audio: ^0.9.38
+  just_audio_background: any
   audio_session: ^0.1.19
   archive: ^3.6.1
+  audio_service: ^0.18.13
+  get_it: ^7.7.0
+  audio_video_progress_bar: ^2.0.3
 
 dev_dependencies:
   flutter_test:
