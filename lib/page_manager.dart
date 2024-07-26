@@ -47,7 +47,8 @@ class PageManager {
     final directory = await getApplicationDocumentsDirectory();
     var newDirectory = Directory("${directory.path}/$tapeId/");
     final songRepository = getIt<PlaylistRepository>();
-    final playlist = await songRepository.fetchInitialPlaylist(newDirectory.path);
+    final numberOfFiles = newDirectory.listSync().length - 1;
+    final playlist = await songRepository.fetchInitialPlaylist(newDirectory.path, numberOfFiles);
     final mediaItems = playlist
         .map((song) => MediaItem(
               id: song['id'] ?? '',
@@ -139,7 +140,8 @@ class PageManager {
 
   void dispose() {
     // _audioHandler.customAction('dispose');
-    // _audioHandler.customAction("clear");
+    _audioHandler.customAction("clear");
+    _audioHandler.skipToQueueItem(0);
     // _audioHandler.stop();
   }
 

@@ -20,11 +20,11 @@ Future<List<AudioBook>> readBookManifest() async {
       var tags = bookElement.findElements('tags').singleOrNull?.innerText;
       
       return AudioBook.fromPosition(
-        tapeId ?? "", 
-        title ?? "", 
-        author ?? "", 
-        synopsis ?? "", 
-        isAudiobook ?? "", 
+        tapeId ?? "",
+        title ?? "",
+        author ?? "",
+        synopsis ?? "",
+        isAudiobook ?? "",
         tags ?? "");
     }).toList();
   } catch (e) {
@@ -44,8 +44,8 @@ Future<void> writeToManifest(List<AudioBook> curretBooks) async {
     XmlProcessing('xml', 'version="1.0"')
   ]);
   final library = XmlElement(XmlName('library'));
-  for (var element in curretBooks) { 
-    final book = XmlElement(XmlName("book"), 
+  for (var element in curretBooks) {
+    final book = XmlElement(XmlName("book"),
       [], [
       XmlElement(XmlName('tape_id'), [], [XmlText(element.tapeId),]),
       XmlElement(XmlName('title'), [], [XmlText(element.title),]),

@@ -1,11 +1,12 @@
 abstract class PlaylistRepository {
-  Future<List<Map<String, String>>> fetchInitialPlaylist(String dirPath);
+  Future<List<Map<String, String>>> fetchInitialPlaylist(String dirPath, int NumFiles);
 }
 
 class DemoPlaylist extends PlaylistRepository {
   @override
   Future<List<Map<String, String>>> fetchInitialPlaylist(String dirPath,
-      {int length = 3}) async {
+      int length) async {
+    _songIndex = 0;
     return List.generate(length, (index) => _nextSong(dirPath));
   }
 
