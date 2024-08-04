@@ -21,7 +21,6 @@ class PlayerScreenState extends State<PlayerScreen> {
   void initState() {
     super.initState();
     getIt<PageManager>().init(widget.tapeId);
-    print(widget.tapeId);
   }
 
   @override

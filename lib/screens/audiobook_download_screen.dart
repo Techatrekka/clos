@@ -184,7 +184,7 @@ class _AudioBookDownloadScreenState extends State<AudioBookDownloadScreen> {
               width: MediaQuery.of(context).size.width * 0.9,
               padding: const EdgeInsets.all(20),
               child: OutlinedButton(
-                onPressed: () => DownloadAudioFiles(book),
+                onPressed: () => downloadAudioFiles(book),
                 child: const Text("Download"),
               )
             ),

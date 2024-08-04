@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:clos/utils/network.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'notifiers/play_button_notifier.dart';
@@ -87,6 +87,17 @@ class PageManager {
         total: oldState.total,
       );
     });
+    bool mutex = false;
+    AudioService.position.listen((positionValue){
+      // this is the 15 second update listening history timer
+      if (positionValue.inSeconds % 15 == 0 && !mutex) {
+        mutex = true;
+        print(positionValue.inSeconds);
+        uploadListeningHistory(1, 1, positionValue);
+        sleep(Duration(seconds: 2));
+        mutex = false;
+      }
+    });
   }
 
   void _listenToBufferedPosition() {
@@ -139,10 +150,8 @@ class PageManager {
   void next() => _audioHandler.skipToNext();
 
   void dispose() {
-    // _audioHandler.customAction('dispose');
     _audioHandler.customAction("clear");
     _audioHandler.skipToQueueItem(0);
-    // _audioHandler.stop();
   }
 
   void stop() {

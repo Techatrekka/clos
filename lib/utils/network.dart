@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:clos/utils/common_functions.dart';
@@ -9,13 +10,6 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
 var networkURl = "http://192.168.1.11:8080";
-
-//test function
-void fetchStrings() async {
-  var response = await http.get(Uri.parse('http://192.168.42.192:8080/strings'));
-  print(response.body.toString());
-}
-
 
 Future<List<AudioBook>> fetchAudioBookList() async {
   var response = await http.get(Uri.parse('$networkURl/catalog/title'));
@@ -78,7 +72,7 @@ Future<void> saveFileLocally(String filename, List<int> bytes) async {
 }
 
 
-void DownloadAudioFiles(AudioBook book) async {
+void downloadAudioFiles(AudioBook book) async {
   String Id = book.tapeId;
   var currentList = await readBookManifest();
   currentList.add(book);
@@ -101,13 +95,18 @@ void DownloadAudioFiles(AudioBook book) async {
   file.deleteSync();
 }
 
-// test function
-Future<void> _requestDownload() async {
-  // create prepare folder for download
-  final task = await FlutterDownloader.enqueue(
-    url: "http://192.168.236.5:8080/downloadAudio/audio.mp3",
-    headers: {'auth': 'test_for_sql_encoding'},
-    savedDir: "_localPath",
-    saveInPublicStorage: false,
-  );
+void uploadListeningHistory(int tapeId, int chapterId, Duration chapterProgress) async {
+	 Map<String,String> headers = {
+      'Content-type' : 'application/json', 
+      'Accept': 'application/json',
+    };
+	var response = await http.post(Uri.http("192.168.1.11:8080", '/uploadListeningHistory/'), headers: headers,
+		body: json.encode({	'tape_id': tapeId,
+				'user_id': 1,
+				'current_chapter': chapterId,
+				'chapter_progress': chapterProgress.inSeconds
+				}));
+	
+	print('Response status: ${response.statusCode}');
+	print('Response body: ${response.body}');
 }
