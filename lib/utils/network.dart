@@ -9,7 +9,8 @@ import 'package:clos/utils/models.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
-var networkURl = "http://192.168.1.11:8080";
+var networkURl = "http://192.168.1.10:8080";
+var networkIP = "192.168.1.10:8080";
 
 Future<List<AudioBook>> fetchAudioBookList() async {
   var response = await http.get(Uri.parse('$networkURl/catalog/title'));
@@ -24,7 +25,7 @@ Future<List<AudioBook>> fetchAudioBookList() async {
 
 Future<AudioBook> fetchAudioBook(String id) async {
   var response = await http.get(Uri.parse('${networkURl}/audio/$id'));
-  print(response.body);
+  // print(response.body);
   if (response.statusCode == 200) {
     var result = jsonDecode(response.body);
     return AudioBook.fromJson(result);
@@ -100,13 +101,30 @@ void uploadListeningHistory(int tapeId, int chapterId, Duration chapterProgress)
       'Content-type' : 'application/json', 
       'Accept': 'application/json',
     };
-	var response = await http.post(Uri.http("192.168.1.11:8080", '/uploadListeningHistory/'), headers: headers,
-		body: json.encode({	'tape_id': tapeId,
+	var response = await http.post(Uri.http(networkIP, '/uploadListeningHistory/'), 
+    headers: headers,
+		body: json.encode(
+      {	
+        'tape_id': tapeId,
 				'user_id': 1,
 				'current_chapter': chapterId,
 				'chapter_progress': chapterProgress.inSeconds
-				}));
-	
-	print('Response status: ${response.statusCode}');
-	print('Response body: ${response.body}');
+      }
+    )
+  );
+
+  // to be logged
+	// print('Response status: ${response.statusCode}');
+	// print('Response body: ${response.body}');
+}
+
+
+Future<ListeningHistory> getListeningHistory(String user_id, String tape_id) async {
+  var response = await http.get(Uri.parse('${networkURl}/getListeningHistory/?&user_id=$user_id&tape_id=$tape_id'));
+  if (response.statusCode == 200) {
+    List<dynamic> result = jsonDecode(response.body);
+    return ListeningHistory.fromJson(result.first);
+  } else {
+    throw Exception('Failed to load album');
+  }
 }

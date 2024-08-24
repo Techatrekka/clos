@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:clos/utils/common_functions.dart';
 import 'package:clos/utils/models.dart';
 import 'package:clos/utils/network.dart';
 import 'package:clos/widgets/custom_app_bar.dart';
@@ -155,22 +156,19 @@ class _AudioBookDownloadScreenState extends State<AudioBookDownloadScreen> {
           children: [
             Row (
               children: [
-                Image.asset(
-                "images/clos_logo.png",
-                height: 200,
-                ),
+                TryGetRemoteImageFile(book.tapeId),
                 Container(
                   padding: const EdgeInsets.all(20),
-                  child: const Column(
+                  child: Column(
                     children: [
                       Text(
-                        "title",
+                        book.title,
                         style: TextStyle(
                           color: Colors.white
                         ),
                       ),
                       Text(
-                        "author",
+                        book.author,
                         style: TextStyle(
                           color: Colors.white
                         ),
@@ -204,8 +202,8 @@ class _AudioBookDownloadScreenState extends State<AudioBookDownloadScreen> {
               width: MediaQuery.of(context).size.width * 0.9,
               padding: const EdgeInsets.all(20),
               color: Colors.black,
-              child: const Text(
-                "Synopsis",
+              child: Text(
+                book.synopsis,
                 style: TextStyle(
                   color: Colors.white
                 ),

@@ -16,6 +16,15 @@ Image TryGetImageFile(String directoryPath, String id) {
   }
 }
 
+Image TryGetRemoteImageFile(String id) {  
+  try {
+    var image = Image.network("http://192.168.1.10:8080/downloadfile/$id", width: 200, height: 300,);
+    return image;
+  } catch (e) {
+    return Image.asset("images/clos_logo.png");
+  }
+}
+
 dynamic TryGetFutureImageFile(BuildContext context, AsyncSnapshot<File> snapshot) {
   try {
     if (File(snapshot.data!.path).existsSync()) {

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:clos/utils/network.dart';
 import 'package:flutter/foundation.dart';
@@ -23,6 +24,13 @@ class PageManager {
   final isTapeImageProvider = ValueNotifier<String>("/data/user/0/com.example.clos/app_flutter/5/image.png");
 
   late AudioHandler _audioHandler;
+  late StreamSubscription<PlaybackState> playbackStateListener;
+  late StreamSubscription<Duration> currentPostionListener;
+  late StreamSubscription<Duration> savePositionListener;
+  late StreamSubscription<PlaybackState> bufferedPositionListener;
+  late StreamSubscription<MediaItem?> totalDurationListener;
+  late StreamSubscription<MediaItem?> songChangesListener;
+
 
   // Events: Calls coming from the UI
   void init(String currentTape) async {
@@ -34,6 +42,7 @@ class PageManager {
     _listenToBufferedPosition();
     _listenToTotalDuration();
     _listenToChangesInSong();
+    await _jumpToPreviousPoint();
     _getImage(currentTape);
   }
 
@@ -61,7 +70,7 @@ class PageManager {
   }
 
   void _listenToPlaybackState() {
-    _audioHandler.playbackState.listen((playbackState) {
+    playbackStateListener = _audioHandler.playbackState.listen((playbackState) {
       final isPlaying = playbackState.playing;
       final processingState = playbackState.processingState;
       if (processingState == AudioProcessingState.loading ||
@@ -79,8 +88,9 @@ class PageManager {
   }
 
   void _listenToCurrentPosition() {
-    AudioService.position.listen((position) {
+    currentPostionListener = AudioService.position.listen((position) {
       final oldState = progressNotifier.value;
+      print(1);
       progressNotifier.value = ProgressBarState(
         current: position,
         buffered: oldState.buffered,
@@ -88,11 +98,10 @@ class PageManager {
       );
     });
     bool mutex = false;
-    AudioService.position.listen((positionValue){
+    savePositionListener = AudioService.position.listen((positionValue) {
       // this is the 15 second update listening history timer
-      if (positionValue.inSeconds % 15 == 0 && !mutex) {
+      if (positionValue.inSeconds % 20 == 0 && !mutex && positionValue.inSeconds != 0) {
         mutex = true;
-        print(positionValue.inSeconds);
         uploadListeningHistory(1, 1, positionValue);
         sleep(Duration(seconds: 2));
         mutex = false;
@@ -100,8 +109,15 @@ class PageManager {
     });
   }
 
+  Future<void> _jumpToPreviousPoint() async {
+    var lh = await getListeningHistory("1","1");
+    await _audioHandler.skipToQueueItem((lh.current_chapter-1));
+    var timeToSkipTo = Duration(seconds: lh.chapter_progress);
+    await _audioHandler.seek(timeToSkipTo);
+  }
+
   void _listenToBufferedPosition() {
-    _audioHandler.playbackState.listen((playbackState) {
+    bufferedPositionListener = _audioHandler.playbackState.listen((playbackState) {
       final oldState = progressNotifier.value;
       progressNotifier.value = ProgressBarState(
         current: oldState.current,
@@ -112,7 +128,7 @@ class PageManager {
   }
 
   void _listenToTotalDuration() {
-    _audioHandler.mediaItem.listen((mediaItem) {
+    totalDurationListener = _audioHandler.mediaItem.listen((mediaItem) {
       final oldState = progressNotifier.value;
       progressNotifier.value = ProgressBarState(
         current: oldState.current,
@@ -123,7 +139,7 @@ class PageManager {
   }
 
   void _listenToChangesInSong() {
-    _audioHandler.mediaItem.listen((mediaItem) {
+    songChangesListener = _audioHandler.mediaItem.listen((mediaItem) {
       currentSongTitleNotifier.value = mediaItem?.title ?? '';
       _updateSkipButtons();
     });
@@ -152,6 +168,12 @@ class PageManager {
   void dispose() {
     _audioHandler.customAction("clear");
     _audioHandler.skipToQueueItem(0);
+    playbackStateListener.cancel();
+    currentPostionListener.cancel();
+    savePositionListener.cancel();
+    bufferedPositionListener.cancel();
+    totalDurationListener.cancel();
+    songChangesListener.cancel();
   }
 
   void stop() {
