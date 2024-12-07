@@ -1,9 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-Image TryGetImageFile(String directoryPath, String id) {  
+Image TryGetImageFile(String directoryPath, String id) {
   Directory home = Directory(directoryPath);
   try {
     var image = File("${home.path}/$id/image.png");
@@ -16,7 +15,7 @@ Image TryGetImageFile(String directoryPath, String id) {
   }
 }
 
-Image TryGetRemoteImageFile(String id) {  
+Image TryGetRemoteImageFile(String id) {
   try {
     var image = Image.network("http://192.168.1.10:8080/downloadfile/$id", width: 200, height: 300,);
     return image;

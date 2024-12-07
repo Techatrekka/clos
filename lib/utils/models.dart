@@ -76,5 +76,24 @@ class ListeningHistory {
       _ => throw const FormatException('Failed to parse Listening history.'),
     };
   }
+}
 
+class TionscadalEolais {
+  String teideal;
+  String fogra;
+  DateTime am;
+
+  TionscadalEolais(this.teideal, this.fogra, this.am);
+
+  factory TionscadalEolais.fromJson(Map<String, dynamic> json) {
+    return switch (json) {
+      {
+        'title': String teideal,
+        'notice': String fogra,
+        'time': DateTime am,
+      } =>
+        TionscadalEolais(teideal, fogra, am),
+      _ => throw const FormatException('Failed to parse Updates.'),
+    };
+  }
 }

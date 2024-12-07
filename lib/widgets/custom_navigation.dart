@@ -15,6 +15,7 @@ final void Function(int) onTap;
 class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
   MaterialColor _library = Colors.amber;
   MaterialColor _explore = Colors.green;
+  MaterialColor _information = Colors.green;
 
   @override
   void initState() {
@@ -33,12 +34,21 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
         setState(() {
           _library = Colors.amber;
           _explore = Colors.green;
+          _information = Colors.green;
         });
         break;
       case 1:
         setState(() {
           _library = Colors.green;
           _explore = Colors.amber;
+          _information = Colors.green;
+        });
+        break;
+      case 2:
+        setState(() {
+          _library = Colors.green;
+          _explore = Colors.green;
+          _information = Colors.amber;
         });
         break;
     }
@@ -61,6 +71,13 @@ Widget build(BuildContext context) {
             color: _explore,
             ),
           label: "Explore",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.info,
+            color: _information,
+            ),
+          label: "Information",
         ),
       ],
       currentIndex: widget.selectedIndex,

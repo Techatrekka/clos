@@ -90,7 +90,6 @@ class PageManager {
   void _listenToCurrentPosition() {
     currentPostionListener = AudioService.position.listen((position) {
       final oldState = progressNotifier.value;
-      print(1);
       progressNotifier.value = ProgressBarState(
         current: position,
         buffered: oldState.buffered,
@@ -102,7 +101,8 @@ class PageManager {
       // this is the 15 second update listening history timer
       if (positionValue.inSeconds % 20 == 0 && !mutex && positionValue.inSeconds != 0) {
         mutex = true;
-        uploadListeningHistory(1, 1, positionValue);
+        // var x = await _audioHandler.mediaItem.single;       
+        uploadListeningHistory(1, 1, positionValue);  
         sleep(Duration(seconds: 2));
         mutex = false;
       }
@@ -111,7 +111,7 @@ class PageManager {
 
   Future<void> _jumpToPreviousPoint() async {
     var lh = await getListeningHistory("1","1");
-    await _audioHandler.skipToQueueItem((lh.current_chapter-1));
+    await _audioHandler.skipToQueueItem((lh.current_chapter));
     var timeToSkipTo = Duration(seconds: lh.chapter_progress);
     await _audioHandler.seek(timeToSkipTo);
   }
@@ -129,6 +129,7 @@ class PageManager {
 
   void _listenToTotalDuration() {
     totalDurationListener = _audioHandler.mediaItem.listen((mediaItem) {
+      // print(mediaItem!.id);
       final oldState = progressNotifier.value;
       progressNotifier.value = ProgressBarState(
         current: oldState.current,

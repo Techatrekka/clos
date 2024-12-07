@@ -24,7 +24,7 @@ class _ExploreScreenState extends State<ExploreSectionScreen> {
 
  @override
   Widget build(BuildContext context) {
-    offering = fetchAudioBookList();
+    offering = fetchAudioBookList(widget.title);
     return Scaffold(
       appBar: const CustomAppBar(title: "Explore"),
       body: Container(

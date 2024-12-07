@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:clos/screens/audiobook_download_screen.dart';
 import 'package:clos/screens/audioplayer_screen.dart';
+import 'package:clos/screens/information_screen.dart';
 import 'package:clos/services/service_locator.dart';
 import 'package:clos/utils/common_functions.dart';
 import 'package:clos/utils/manifest_handler.dart';
@@ -84,6 +85,11 @@ class _MyHomePageState extends State<MyHomePage> {
             builder: (_) => const ExploreScreen(title: 'Explore'),
           ),
         );
+        break;
+      case 2:
+        Navigator.pushReplacement(
+          context, 
+          MaterialPageRoute(builder: (_) => const InformationScreen(title: 'Information')));
         break;
     }
   }

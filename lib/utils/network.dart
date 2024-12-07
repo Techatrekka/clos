@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:clos/utils/common_functions.dart';
@@ -9,11 +8,11 @@ import 'package:clos/utils/models.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
-var networkURl = "http://192.168.1.10:8080";
+var networkURl = "http://192.168.1.8:8080";
 var networkIP = "192.168.1.10:8080";
 
-Future<List<AudioBook>> fetchAudioBookList() async {
-  var response = await http.get(Uri.parse('$networkURl/catalog/title'));
+Future<List<AudioBook>> fetchAudioBookList(String section) async {
+  var response = await http.get(Uri.parse('$networkURl/catalog/$section'));
   if (response.statusCode == 200) {
     List<dynamic> result = jsonDecode(response.body);
     var c = result.map((json) => AudioBook.fromJson(json)).toList();
@@ -124,6 +123,16 @@ Future<ListeningHistory> getListeningHistory(String user_id, String tape_id) asy
   if (response.statusCode == 200) {
     List<dynamic> result = jsonDecode(response.body);
     return ListeningHistory.fromJson(result.first);
+  } else {
+    throw Exception('Failed to load album');
+  }
+}
+
+Future<List<TionscadalEolais>> getApplicationUpdates() async {
+  var response = await http.get(Uri.parse('$networkURl/getApplicationUpdates/'));
+  if (response.statusCode == 200) {
+    List<dynamic> result = jsonDecode(response.body);
+    return result.map((json) => TionscadalEolais.fromJson(json)).toList();
   } else {
     throw Exception('Failed to load album');
   }
