@@ -1,0 +1,15 @@
+meta {
+  name: Download Audiobook By Id
+  type: http
+  seq: 5
+}
+
+get {
+  url: localhost:8080/download/:fileId
+  body: none
+  auth: none
+}
+
+params:path {
+  fileId: 
+}

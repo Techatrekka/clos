@@ -1,0 +1,15 @@
+meta {
+  name: DownloadFile by Id
+  type: http
+  seq: 8
+}
+
+get {
+  url: localhost:8080/downloadfile/:fileId
+  body: none
+  auth: none
+}
+
+params:path {
+  fileId: 
+}
