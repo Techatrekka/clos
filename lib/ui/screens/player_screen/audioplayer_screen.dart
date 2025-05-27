@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'package:clos/notifiers/play_button_notifier.dart';
-import 'package:clos/notifiers/progress_notifier.dart';
-import 'package:clos/page_manager.dart';
+import 'package:clos/services/notifiers/play_button_notifier.dart';
+import 'package:clos/services/notifiers/progress_notifier.dart';
+import 'package:clos/services/audio/page_manager.dart';
 import 'package:clos/services/service_locator.dart';
-import 'package:clos/widgets/custom_app_bar.dart';
+import 'package:clos/ui/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 
@@ -54,7 +54,7 @@ class PlayerScreenState extends State<PlayerScreen> {
 }
 
 class CurrentSongTitle extends StatelessWidget {
-  const CurrentSongTitle({Key? key}) : super(key: key);
+  const CurrentSongTitle({super.key});
   @override
   Widget build(BuildContext context) {
     final pageManager = getIt<PageManager>();
@@ -71,7 +71,7 @@ class CurrentSongTitle extends StatelessWidget {
 }
 
 class TapeImage extends StatelessWidget {
-  const TapeImage({Key? key}) : super(key: key);
+  const TapeImage({super.key});
   @override
   Widget build(BuildContext context) {
     final pageManager = getIt<PageManager>();
@@ -87,7 +87,7 @@ class TapeImage extends StatelessWidget {
 }
 
 class AudioProgressBar extends StatelessWidget {
-  const AudioProgressBar({Key? key}) : super(key: key);
+  const AudioProgressBar({super.key});
   @override
   Widget build(BuildContext context) {
     final pageManager = getIt<PageManager>();
@@ -108,7 +108,7 @@ class AudioProgressBar extends StatelessWidget {
 }
 
 class AudioControlButtons extends StatelessWidget {
-  const AudioControlButtons({Key? key}) : super(key: key);
+  const AudioControlButtons({super.key});
   @override
   Widget build(BuildContext context) {
     return const SizedBox(
@@ -126,7 +126,7 @@ class AudioControlButtons extends StatelessWidget {
 }
 
 class PreviousSongButton extends StatelessWidget {
-  const PreviousSongButton({Key? key}) : super(key: key);
+  const PreviousSongButton({super.key});
   @override
   Widget build(BuildContext context) {
     final pageManager = getIt<PageManager>();
@@ -144,7 +144,7 @@ class PreviousSongButton extends StatelessWidget {
 }
 
 class PlayButton extends StatelessWidget {
-  const PlayButton({Key? key}) : super(key: key);
+  const PlayButton({super.key});
   @override
   Widget build(BuildContext context) {
     final pageManager = getIt<PageManager>();
@@ -180,7 +180,7 @@ class PlayButton extends StatelessWidget {
 }
 
 class NextSongButton extends StatelessWidget {
-  const NextSongButton({Key? key}) : super(key: key);
+  const NextSongButton({super.key});
   @override
   Widget build(BuildContext context) {
     final pageManager = getIt<PageManager>();

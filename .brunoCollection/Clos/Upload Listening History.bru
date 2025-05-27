@@ -6,6 +6,15 @@ meta {
 
 post {
   url: localhost:8080/uploadListeningHistory/
-  body: none
+  body: json
   auth: none
+}
+
+body:json {
+  {
+          "tape_id": 1,
+          "user_id": 1,
+          "current_chapter": 2,
+          "chapter_progress": 23
+  }
 }

@@ -1,11 +1,9 @@
 import 'package:clos/main.dart';
-import 'package:clos/screens/audiobook_download_screen.dart';
-import 'package:clos/screens/explore_screen.dart';
-import 'package:clos/widgets/custom_app_bar.dart';
-import 'package:clos/widgets/custom_navigation.dart';
-import 'package:clos/widgets/library_list_tile.dart';
-import 'package:clos/utils/models.dart';
-import 'package:clos/utils/network.dart';
+import 'package:clos/models/project_notice.dart';
+import 'package:clos/ui/screens/home_screen/explore_screen.dart';
+import 'package:clos/ui/widgets/custom_app_bar.dart';
+import 'package:clos/ui/widgets/custom_navigation.dart';
+import 'package:clos/services/io/network.dart';
 import 'package:flutter/material.dart';
 
 class InformationScreen extends StatefulWidget {
@@ -19,7 +17,7 @@ class InformationScreen extends StatefulWidget {
 
 class _InformationScreenState extends State<InformationScreen> {
   final int _selectedIndex = 2;
-  late Future<List<TionscadalEolais>> fograi;
+  late Future<List<ProjectNotice>> fograi;
   
   @override
   void initState() {
@@ -49,7 +47,7 @@ class _InformationScreenState extends State<InformationScreen> {
       body: Container(
         color: const Color.fromRGBO(0, 0, 0, 0.867),
         child: 
-          FutureBuilder<List<TionscadalEolais>> (
+          FutureBuilder<List<ProjectNotice>> (
           future: fograi,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -61,7 +59,7 @@ class _InformationScreenState extends State<InformationScreen> {
                       child: Column(
                         children: [
                           Text(
-                            currentEntry[index].teideal,
+                            currentEntry[index].title,
                             style: const TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 30,
@@ -69,7 +67,7 @@ class _InformationScreenState extends State<InformationScreen> {
                             ),
                           ),
                           Text(
-                            currentEntry[index].fogra,
+                            currentEntry[index].description,
                             style: const TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 15,
@@ -77,7 +75,7 @@ class _InformationScreenState extends State<InformationScreen> {
                             ),
                           ),
                           Text(
-                            currentEntry[index].teideal,
+                            currentEntry[index].title,
                             style: const TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 30,

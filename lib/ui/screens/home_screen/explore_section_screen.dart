@@ -1,8 +1,6 @@
-import 'package:clos/screens/audiobook_download_screen.dart';
-import 'package:clos/widgets/custom_app_bar.dart';
-import 'package:clos/widgets/library_list_tile.dart';
-import 'package:clos/utils/models.dart';
-import 'package:clos/utils/network.dart';
+import 'package:clos/ui/widgets/custom_app_bar.dart';
+import 'package:clos/models/audiobook.dart';
+import 'package:clos/services/io/network.dart';
 import 'package:flutter/material.dart';
 
 class ExploreSectionScreen extends StatefulWidget {

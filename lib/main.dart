@@ -1,15 +1,15 @@
 import 'dart:io';
 
-import 'package:clos/screens/audiobook_download_screen.dart';
-import 'package:clos/screens/audioplayer_screen.dart';
-import 'package:clos/screens/information_screen.dart';
+import 'package:clos/ui/screens/download_screen/audiobook_download_screen.dart';
+import 'package:clos/ui/screens/player_screen/audioplayer_screen.dart';
+import 'package:clos/ui/screens/home_screen/information_screen.dart';
 import 'package:clos/services/service_locator.dart';
-import 'package:clos/utils/common_functions.dart';
-import 'package:clos/utils/manifest_handler.dart';
-import 'package:clos/widgets/custom_app_bar.dart';
-import 'package:clos/widgets/custom_navigation.dart';
-import 'package:clos/screens/explore_screen.dart';
-import 'package:clos/utils/models.dart';
+import 'package:clos/services/common_functions.dart';
+import 'package:clos/services/io/manifest_handler.dart';
+import 'package:clos/ui/widgets/custom_app_bar.dart';
+import 'package:clos/ui/widgets/custom_navigation.dart';
+import 'package:clos/ui/screens/home_screen/explore_screen.dart';
+import 'package:clos/models/audiobook.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
       home: const MyHomePage(title: 'Library'),
       routes: {
         // '/': (context) => HomePage(),
-        '/downloadpage': (context) => AudioBookDownloadScreen(),
+        '/downloadpage': (context) => const AudioBookDownloadScreen(),
         // '/playerpage': (context) => PlayerScreen(),
       },
     );
@@ -61,8 +61,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final int _selectedIndex = 0;
+  bool deleteMode = false;
   late Future<List<AudioBook>> books;
   Directory home = Directory("/data/user/0/com.example.clos/app_flutter/");
+  int index = 0; // Selects the customization.
+  static const List<(Color?, Color? background, ShapeBorder?)> customizations =
+      <(Color?, Color?, ShapeBorder?)>[
+        (null, null, null), // The FAB uses its default for null parameters.
+        (null, Colors.red, null),
+  ];
 
   @override
   void initState() {
@@ -135,6 +142,17 @@ class _MyHomePageState extends State<MyHomePage> {
                     title: Center (
                       child: Column(
                         children: [
+                          Visibility(
+                            visible: deleteMode,
+                            child: IconButton(
+                              color:  Colors.red,
+                              onPressed: () {
+                                // final folder = Directory("${home.path}/${book.tapeId}");
+                                // folder.deleteSync(recursive: true);
+                                refreshManifest();
+                              }, 
+                              icon: const Icon(Icons.delete)),
+                            ),
                           TryGetImageFile(home.path, book.tapeId),
                           Text(
                             book.title,
@@ -168,6 +186,17 @@ class _MyHomePageState extends State<MyHomePage> {
           }
         )
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          refreshManifest();
+          deleteMode = !deleteMode;
+          setState(() {
+            index = (index + 1) % customizations.length;
+          });
+        },
+        foregroundColor: customizations[index].$1,
+        backgroundColor: customizations[index].$2,
+        child: const Icon(Icons.delete),),
       bottomNavigationBar: CustomBottomNavigation(
         selectedIndex: _selectedIndex, 
         onTap: _onNavBarItemTapped,

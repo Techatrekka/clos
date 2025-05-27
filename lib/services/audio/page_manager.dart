@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:clos/utils/network.dart';
+import 'package:clos/services/io/network.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
-import 'notifiers/play_button_notifier.dart';
-import 'notifiers/progress_notifier.dart';
-import 'notifiers/repeat_button_notifier.dart';
+import '../notifiers/play_button_notifier.dart';
+import '../notifiers/progress_notifier.dart';
+import '../notifiers/repeat_button_notifier.dart';
 import 'package:audio_service/audio_service.dart';
-import 'services/playlist_repository.dart';
-import 'services/service_locator.dart';
+import 'playlist_repository.dart';
+import '../service_locator.dart';
 
 class PageManager {
   // Listeners: Updates going to the UI
@@ -103,7 +103,7 @@ class PageManager {
         mutex = true;
         // var x = await _audioHandler.mediaItem.single;       
         uploadListeningHistory(1, 1, positionValue);  
-        sleep(Duration(seconds: 2));
+        sleep(const Duration(seconds: 2));
         mutex = false;
       }
     });

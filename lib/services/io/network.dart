@@ -1,15 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:archive/archive_io.dart';
-import 'package:clos/utils/common_functions.dart';
-import 'package:clos/utils/manifest_handler.dart';
+import 'package:clos/services/common_functions.dart';
+import 'package:clos/services/io/manifest_handler.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:clos/utils/models.dart';
+import 'package:clos/models/models.dart';
+import 'package:clos/models/audiobook.dart';
+import 'package:clos/models/project_notice.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
-var networkURl = "http://192.168.1.8:8080";
-var networkIP = "192.168.1.10:8080";
+var networkIP = "192.168.1.5:8080";
+var networkURl = "http://$networkIP";
 
 Future<List<AudioBook>> fetchAudioBookList(String section) async {
   var response = await http.get(Uri.parse('$networkURl/catalog/$section'));
@@ -23,8 +25,7 @@ Future<List<AudioBook>> fetchAudioBookList(String section) async {
 }
 
 Future<AudioBook> fetchAudioBook(String id) async {
-  var response = await http.get(Uri.parse('${networkURl}/audio/$id'));
-  // print(response.body);
+  var response = await http.get(Uri.parse('$networkURl/audio/$id'));
   if (response.statusCode == 200) {
     var result = jsonDecode(response.body);
     return AudioBook.fromJson(result);
@@ -88,9 +89,9 @@ void downloadAudioFiles(AudioBook book) async {
     showNotification: false, // show download progress in status bar (for Android)
     openFileFromNotification: false, // click on notification to open downloaded file (for Android)
   );
-  await Future.delayed(Duration(seconds: 10));
+  await Future.delayed(const Duration(seconds: 10));
   await extractFileToDisk("${directory.path}/archive-$Id.zip",newdirectory.path);
-  await Future.delayed(Duration(seconds: 3));
+  await Future.delayed(const Duration(seconds: 3));
   File file = File("${directory.path}/archive-$Id.zip");
   file.deleteSync();
 }
@@ -111,15 +112,11 @@ void uploadListeningHistory(int tapeId, int chapterId, Duration chapterProgress)
       }
     )
   );
-
-  // to be logged
-	// print('Response status: ${response.statusCode}');
-	// print('Response body: ${response.body}');
 }
 
 
-Future<ListeningHistory> getListeningHistory(String user_id, String tape_id) async {
-  var response = await http.get(Uri.parse('${networkURl}/getListeningHistory/?&user_id=$user_id&tape_id=$tape_id'));
+Future<ListeningHistory> getListeningHistory(String userId, String tapeId) async {
+  var response = await http.get(Uri.parse('$networkURl/getListeningHistory/?&user_id=$userId&tape_id=$tapeId'));
   if (response.statusCode == 200) {
     List<dynamic> result = jsonDecode(response.body);
     return ListeningHistory.fromJson(result.first);
@@ -128,11 +125,11 @@ Future<ListeningHistory> getListeningHistory(String user_id, String tape_id) asy
   }
 }
 
-Future<List<TionscadalEolais>> getApplicationUpdates() async {
+Future<List<ProjectNotice>> getApplicationUpdates() async {
   var response = await http.get(Uri.parse('$networkURl/getApplicationUpdates/'));
   if (response.statusCode == 200) {
     List<dynamic> result = jsonDecode(response.body);
-    return result.map((json) => TionscadalEolais.fromJson(json)).toList();
+    return result.map((json) => ProjectNotice.fromJson(json)).toList();
   } else {
     throw Exception('Failed to load album');
   }

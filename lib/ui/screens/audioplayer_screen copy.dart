@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:audio_session/audio_session.dart';
-import 'package:clos/utils/common_functions.dart';
-import 'package:clos/utils/models.dart';
-import 'package:clos/widgets/custom_app_bar.dart';
+import 'package:clos/services/common_functions.dart';
+import 'package:clos/models/audiobook.dart';
+import 'package:clos/ui/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:clos/utils/audioplayer_common.dart';
+import 'package:clos/ui/widgets/audioplayer_common.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 

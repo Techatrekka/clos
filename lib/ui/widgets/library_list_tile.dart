@@ -1,5 +1,5 @@
-import 'package:clos/utils/common_functions.dart';
-import 'package:clos/utils/models.dart';
+import 'package:clos/services/common_functions.dart';
+import 'package:clos/models/audiobook.dart';
 import 'package:flutter/material.dart';
 
 ListTile imageTile(String title, String author, String homeDirectory, String id, void Function() onTap) {
