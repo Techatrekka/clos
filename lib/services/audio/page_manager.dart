@@ -88,32 +88,32 @@ class PageManager {
   }
 
   void _listenToCurrentPosition() {
-    currentPostionListener = AudioService.position.listen((position) {
-      final oldState = progressNotifier.value;
-      progressNotifier.value = ProgressBarState(
-        current: position,
-        buffered: oldState.buffered,
-        total: oldState.total,
-      );
-    });
-    bool mutex = false;
-    savePositionListener = AudioService.position.listen((positionValue) {
-      // this is the 15 second update listening history timer
-      if (positionValue.inSeconds % 20 == 0 && !mutex && positionValue.inSeconds != 0) {
-        mutex = true;
-        // var x = await _audioHandler.mediaItem.single;       
-        uploadListeningHistory(1, 1, positionValue);  
-        sleep(const Duration(seconds: 2));
-        mutex = false;
-      }
-    });
+    // currentPostionListener = AudioService.position.listen((position) {
+    //   final oldState = progressNotifier.value;
+    //   progressNotifier.value = ProgressBarState(
+    //     current: position,
+    //     buffered: oldState.buffered,
+    //     total: oldState.total,
+    //   );
+    // });
+    // bool mutex = false;
+    // savePositionListener = AudioService.position.listen((positionValue) {
+    //   // this is the 15 second update listening history timer
+    //   if (positionValue.inSeconds % 20 == 0 && !mutex && positionValue.inSeconds != 0) {
+    //     mutex = true;
+    //     // var x = await _audioHandler.mediaItem.single;       
+    //     uploadListeningHistory(1, 1, positionValue);  
+    //     sleep(const Duration(seconds: 2));
+    //     mutex = false;
+    //   }
+    // });
   }
 
   Future<void> _jumpToPreviousPoint() async {
-    var lh = await getListeningHistory("1","1");
-    await _audioHandler.skipToQueueItem((lh.current_chapter));
-    var timeToSkipTo = Duration(seconds: lh.chapter_progress);
-    await _audioHandler.seek(timeToSkipTo);
+    // var lh = await getListeningHistory("1","1");
+    // await _audioHandler.skipToQueueItem((lh.current_chapter));
+    // var timeToSkipTo = Duration(seconds: lh.chapter_progress);
+    // await _audioHandler.seek(timeToSkipTo);
   }
 
   void _listenToBufferedPosition() {

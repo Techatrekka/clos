@@ -21,7 +21,7 @@ class _InformationScreenState extends State<InformationScreen> {
   
   @override
   void initState() {
-    fograi = getApplicationUpdates();
+    //fograi = getApplicationUpdates();
     super.initState();
   }
 

@@ -1,12 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:archive/archive_io.dart';
-import 'package:clos/services/common_functions.dart';
 import 'package:clos/services/io/manifest_handler.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:clos/models/models.dart';
 import 'package:clos/models/audiobook.dart';
-import 'package:clos/models/project_notice.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
@@ -14,10 +11,21 @@ var networkIP = "192.168.1.5:8080";
 var networkURl = "http://$networkIP";
 
 Future<List<AudioBook>> fetchAudioBookList(String section) async {
-  var response = await http.get(Uri.parse('$networkURl/catalog/$section'));
+  //var response = await http.get(Uri.parse('$networkURl/catalog/$section'));
+  const String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZncnFxd3FubmhsYmtucmp6YXZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTgzMTUyMTMsImV4cCI6MjAzMzg5MTIxM30.VaRrp6pztt63KIe5sqoGfw-byLPm4TMxyeoBrqY76Gc';
+  var response = await http.get(Uri.parse('https://vgrqqwqnnhlbknrjzavn.supabase.co/functions/v1/dynamic-service'),
+   headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization' : 'Bearer $token'});
+  print(response.body);
+  print(response.statusCode);
   if (response.statusCode == 200) {
-    List<dynamic> result = jsonDecode(response.body);
+    Map<String, dynamic> jsonMap = jsonDecode(response.body);
+    List<dynamic> result = jsonMap['data'];
+    print(result.first);
     var c = result.map((json) => AudioBook.fromJson(json)).toList();
+    print(c.length);
     return c;
   } else {
     throw Exception('Failed to load album');
@@ -27,51 +35,12 @@ Future<List<AudioBook>> fetchAudioBookList(String section) async {
 Future<AudioBook> fetchAudioBook(String id) async {
   var response = await http.get(Uri.parse('$networkURl/audio/$id'));
   if (response.statusCode == 200) {
-    var result = jsonDecode(response.body);
-    return AudioBook.fromJson(result);
+    final Map<String, dynamic> result = jsonDecode(response.body);
+    return AudioBook.fromJson(result['data']);
   } else {
     throw Exception('Failed to load album');
   }
 }
-
-//out of use
-void fetchAudioFile() async {
-  var directory = await getApplicationDocumentsDirectory();
-  var filePath = directory.path;
-  final taskId = await FlutterDownloader.enqueue(
-    url: '$networkURl/audio.mp3',
-    fileName: "audio.mp3", // optional: header send with url (auth token etc)
-    savedDir: filePath,
-    saveInPublicStorage: true,
-    showNotification: true, // show download progress in status bar (for Android)
-    openFileFromNotification: true, // click on notification to open downloaded file (for Android)
-  );
-}
-
-// test function
-Future<void> attemptSaveFile(String filename, List<int> bytes) async {
-  bool hasPermission = await checkAndRequestStoragePermission();
-  if (hasPermission) {
-    try {
-      await saveFileLocally(filename, bytes);
-      print("File download and save completed.");
-    } catch (e) {
-      print("An error occurred while saving the file: $e");
-    }
-  } else {
-    print("Storage permission not granted. Cannot save the file.");
-  }
-}
-
-// test function
-Future<void> saveFileLocally(String filename, List<int> bytes) async {
-  Directory directory = await getApplicationDocumentsDirectory();
-  String path = directory.path + filename;
-  File file = File(path);
-  await file.writeAsBytes(bytes);
-  print("File saved at $path");
-}
-
 
 void downloadAudioFiles(AudioBook book) async {
   String Id = book.tapeId;
@@ -94,43 +63,4 @@ void downloadAudioFiles(AudioBook book) async {
   await Future.delayed(const Duration(seconds: 3));
   File file = File("${directory.path}/archive-$Id.zip");
   file.deleteSync();
-}
-
-void uploadListeningHistory(int tapeId, int chapterId, Duration chapterProgress) async {
-	 Map<String,String> headers = {
-      'Content-type' : 'application/json', 
-      'Accept': 'application/json',
-    };
-	var response = await http.post(Uri.http(networkIP, '/uploadListeningHistory/'), 
-    headers: headers,
-		body: json.encode(
-      {	
-        'tape_id': tapeId,
-				'user_id': 1,
-				'current_chapter': chapterId,
-				'chapter_progress': chapterProgress.inSeconds
-      }
-    )
-  );
-}
-
-
-Future<ListeningHistory> getListeningHistory(String userId, String tapeId) async {
-  var response = await http.get(Uri.parse('$networkURl/getListeningHistory/?&user_id=$userId&tape_id=$tapeId'));
-  if (response.statusCode == 200) {
-    List<dynamic> result = jsonDecode(response.body);
-    return ListeningHistory.fromJson(result.first);
-  } else {
-    throw Exception('Failed to load album');
-  }
-}
-
-Future<List<ProjectNotice>> getApplicationUpdates() async {
-  var response = await http.get(Uri.parse('$networkURl/getApplicationUpdates/'));
-  if (response.statusCode == 200) {
-    List<dynamic> result = jsonDecode(response.body);
-    return result.map((json) => ProjectNotice.fromJson(json)).toList();
-  } else {
-    throw Exception('Failed to load album');
-  }
 }
