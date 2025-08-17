@@ -1,9 +1,9 @@
 import 'package:clos/main.dart';
 import 'package:clos/models/project_notice.dart';
 import 'package:clos/ui/screens/home_screen/explore_screen.dart';
+import 'package:clos/ui/screens/home_screen/home_page.dart';
 import 'package:clos/ui/widgets/custom_app_bar.dart';
 import 'package:clos/ui/widgets/custom_navigation.dart';
-import 'package:clos/services/io/network.dart';
 import 'package:flutter/material.dart';
 
 class InformationScreen extends StatefulWidget {

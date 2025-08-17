@@ -1,9 +1,9 @@
 import 'package:clos/ui/screens/home_screen/explore_section_screen.dart';
+import 'package:clos/ui/screens/home_screen/home_page.dart';
 import 'package:clos/ui/screens/home_screen/information_screen.dart';
 import 'package:clos/ui/widgets/custom_app_bar.dart';
 import 'package:clos/ui/widgets/custom_navigation.dart';
 import 'package:clos/ui/widgets/library_list_tile.dart';
-import 'package:clos/main.dart';
 import 'package:clos/models/models.dart';
 import 'package:flutter/material.dart';
 
