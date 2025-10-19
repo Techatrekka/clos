@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:clos/utils/network.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
-import 'notifiers/play_button_notifier.dart';
-import 'notifiers/progress_notifier.dart';
-import 'notifiers/repeat_button_notifier.dart';
+import '../notifiers/play_button_notifier.dart';
+import '../notifiers/progress_notifier.dart';
+import '../notifiers/repeat_button_notifier.dart';
 import 'package:audio_service/audio_service.dart';
-import 'services/playlist_repository.dart';
-import 'services/service_locator.dart';
+import 'playlist_repository.dart';
+import '../service_locator.dart';
 
 class PageManager {
   // Listeners: Updates going to the UI
@@ -88,32 +87,32 @@ class PageManager {
   }
 
   void _listenToCurrentPosition() {
-    currentPostionListener = AudioService.position.listen((position) {
-      final oldState = progressNotifier.value;
-      print(1);
-      progressNotifier.value = ProgressBarState(
-        current: position,
-        buffered: oldState.buffered,
-        total: oldState.total,
-      );
-    });
-    bool mutex = false;
-    savePositionListener = AudioService.position.listen((positionValue) {
-      // this is the 15 second update listening history timer
-      if (positionValue.inSeconds % 20 == 0 && !mutex && positionValue.inSeconds != 0) {
-        mutex = true;
-        uploadListeningHistory(1, 1, positionValue);
-        sleep(Duration(seconds: 2));
-        mutex = false;
-      }
-    });
+    // currentPostionListener = AudioService.position.listen((position) {
+    //   final oldState = progressNotifier.value;
+    //   progressNotifier.value = ProgressBarState(
+    //     current: position,
+    //     buffered: oldState.buffered,
+    //     total: oldState.total,
+    //   );
+    // });
+    // bool mutex = false;
+    // savePositionListener = AudioService.position.listen((positionValue) {
+    //   // this is the 15 second update listening history timer
+    //   if (positionValue.inSeconds % 20 == 0 && !mutex && positionValue.inSeconds != 0) {
+    //     mutex = true;
+    //     // var x = await _audioHandler.mediaItem.single;       
+    //     uploadListeningHistory(1, 1, positionValue);  
+    //     sleep(const Duration(seconds: 2));
+    //     mutex = false;
+    //   }
+    // });
   }
 
   Future<void> _jumpToPreviousPoint() async {
-    var lh = await getListeningHistory("1","1");
-    await _audioHandler.skipToQueueItem((lh.current_chapter-1));
-    var timeToSkipTo = Duration(seconds: lh.chapter_progress);
-    await _audioHandler.seek(timeToSkipTo);
+    // var lh = await getListeningHistory("1","1");
+    // await _audioHandler.skipToQueueItem((lh.current_chapter));
+    // var timeToSkipTo = Duration(seconds: lh.chapter_progress);
+    // await _audioHandler.seek(timeToSkipTo);
   }
 
   void _listenToBufferedPosition() {
@@ -129,6 +128,7 @@ class PageManager {
 
   void _listenToTotalDuration() {
     totalDurationListener = _audioHandler.mediaItem.listen((mediaItem) {
+      // print(mediaItem!.id);
       final oldState = progressNotifier.value;
       progressNotifier.value = ProgressBarState(
         current: oldState.current,

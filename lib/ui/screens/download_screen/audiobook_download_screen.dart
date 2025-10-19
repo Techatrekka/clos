@@ -2,10 +2,10 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:clos/utils/common_functions.dart';
-import 'package:clos/utils/models.dart';
-import 'package:clos/utils/network.dart';
-import 'package:clos/widgets/custom_app_bar.dart';
+import 'package:clos/services/common_functions.dart';
+import 'package:clos/models/audiobook.dart';
+import 'package:clos/services/io/network.dart';
+import 'package:clos/ui/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
@@ -163,13 +163,13 @@ class _AudioBookDownloadScreenState extends State<AudioBookDownloadScreen> {
                     children: [
                       Text(
                         book.title,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white
                         ),
                       ),
                       Text(
                         book.author,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white
                         ),
                       ),
@@ -182,7 +182,7 @@ class _AudioBookDownloadScreenState extends State<AudioBookDownloadScreen> {
               width: MediaQuery.of(context).size.width * 0.9,
               padding: const EdgeInsets.all(20),
               child: OutlinedButton(
-                onPressed: () => downloadAudioFiles(book),
+                onPressed: () => downloadAudioFilesv3(book),//downloadAudioFiles(book),
                 child: const Text("Download"),
               )
             ),
@@ -204,7 +204,7 @@ class _AudioBookDownloadScreenState extends State<AudioBookDownloadScreen> {
               color: Colors.black,
               child: Text(
                 book.synopsis,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white
                 ),
               ),

@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:clos/utils/models.dart';
+import 'package:clos/models/audiobook.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:xml/xml.dart';
 
@@ -28,6 +28,7 @@ Future<List<AudioBook>> readBookManifest() async {
         tags ?? "");
     }).toList();
   } catch (e) {
+    createManifestWhereNoneDetected();
     return [];
   }
   return books;
@@ -72,7 +73,34 @@ void placeAudioFile(File audio, String id) async {
 
 void createManifestWhereNoneDetected() async {
   var directory = await getApplicationDocumentsDirectory();
-  var exemptFolders = {"flutter_assets"};
+  //var exemptFolders = {"flutter_assets"};
   var files = await directory.list().toList();
   print(files.first.path.toString().split("/").last);
 }
+
+Future<List<int>> checkStoredBooks() async {
+  Directory directory = await getApplicationDocumentsDirectory();
+  var listOfFiles = directory.listSync(recursive: false);
+  var filteredList = List<int>.empty();
+  for (var i = 0; i < filteredList.length; i++) {
+    if (!listOfFiles.elementAt(i).path.split("/").last.contains(RegExp(r'[A-Z]'))) {
+      filteredList.add(listOfFiles.elementAt(i).path.split("/").last as int);
+    }
+  }
+  return filteredList;
+}
+
+void refreshManifest() async {
+  var newList = List<AudioBook>.empty();
+  var books = await readBookManifest();
+  var checkedBooks = await checkStoredBooks();
+  for (var i = 0; i < books.length; i++) {
+    if (checkedBooks.contains(books.elementAt(i).tapeId)) {
+      newList.add(books.elementAt(i));
+    }
+  }
+  writeToManifest(newList);
+}
+
+//taiscéal
+//ar thóir

@@ -1,8 +1,6 @@
-import 'package:clos/screens/audiobook_download_screen.dart';
-import 'package:clos/widgets/custom_app_bar.dart';
-import 'package:clos/widgets/library_list_tile.dart';
-import 'package:clos/utils/models.dart';
-import 'package:clos/utils/network.dart';
+import 'package:clos/ui/widgets/custom_app_bar.dart';
+import 'package:clos/models/audiobook.dart';
+import 'package:clos/services/io/network.dart';
 import 'package:flutter/material.dart';
 
 class ExploreSectionScreen extends StatefulWidget {
@@ -24,7 +22,11 @@ class _ExploreScreenState extends State<ExploreSectionScreen> {
 
  @override
   Widget build(BuildContext context) {
-    offering = fetchAudioBookList();
+    var is_audiobook = "false";
+    if (widget.title == "audiobooks") {
+      is_audiobook = "true";
+    }
+    offering = fetchAudioBookList(is_audiobook);
     return Scaffold(
       appBar: const CustomAppBar(title: "Explore"),
       body: Container(

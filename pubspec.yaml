@@ -48,6 +48,7 @@ dependencies:
   audio_service: ^0.18.13
   get_it: ^7.7.0
   audio_video_progress_bar: ^2.0.3
+  background_downloader: ^8.9.1
 
 dev_dependencies:
   flutter_test:

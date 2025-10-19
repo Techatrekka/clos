@@ -1,9 +1,10 @@
-import 'package:clos/screens/explore_section_screen.dart';
-import 'package:clos/widgets/custom_app_bar.dart';
-import 'package:clos/widgets/custom_navigation.dart';
-import 'package:clos/widgets/library_list_tile.dart';
-import 'package:clos/main.dart';
-import 'package:clos/utils/models.dart';
+import 'package:clos/ui/screens/home_screen/explore_section_screen.dart';
+import 'package:clos/ui/screens/home_screen/home_page.dart';
+import 'package:clos/ui/screens/home_screen/information_screen.dart';
+import 'package:clos/ui/widgets/custom_app_bar.dart';
+import 'package:clos/ui/widgets/custom_navigation.dart';
+import 'package:clos/ui/widgets/library_list_tile.dart';
+import 'package:clos/models/models.dart';
 import 'package:flutter/material.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -29,14 +30,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
           context, 
           MaterialPageRoute(builder: (_) => const MyHomePage(title: 'Library')));
         break;
+      case 2:
+        Navigator.pushReplacement(
+          context, 
+          MaterialPageRoute(builder: (_) => const InformationScreen(title: 'Information')));
+        break;
     }
-  }
-
-  void _onSectionTileTouched() {
-    Navigator.push(
-      context, 
-      MaterialPageRoute(builder: (_) => const ExploreSectionScreen(title: "title",))
-    );
   }
 
  @override
@@ -47,8 +46,18 @@ class _ExploreScreenState extends State<ExploreScreen> {
         color: const Color.fromRGBO(0, 0, 0, 0.867),
         child: ListView(
           children: [
-            sectionTile(headings[0].title, headings[0].iconLocation, _onSectionTileTouched),
-            sectionTile(headings[1].title, headings[1].iconLocation, _onSectionTileTouched),
+            sectionTile(headings[0].title, headings[0].iconLocation, () { 
+              Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (_) => const ExploreSectionScreen(title: "audiobooks"))
+                );
+              }),
+            sectionTile(headings[1].title, headings[1].iconLocation, () { 
+              Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (_) => const ExploreSectionScreen(title: "folklore"))
+                );
+              }),
             // sectionTile(headings[2].title, headings[2].iconLocation, _onSectionTileTouched),
           ],
         ),
